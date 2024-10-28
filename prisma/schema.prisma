@@ -12,66 +12,68 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  id                 Int       @id @default(autoincrement())
-  username           String    @unique
+  id                 Int        @id @default(autoincrement())
+  username           String     @unique
   password           String
   playlists          Playlist[]
-  tracks             Track[]   @relation("UserTracks")
+  tracks             Track[]    @relation("UserTracks")
   edits              Edit[]
   uploads            Upload[]
-  spotifyUsername    String?   
+  spotifyUsername    String?
   socialMediaAccount String?
   firstName          String
-  email              String    @unique
+  lastName           String
+  email              String     @unique
 }
 
 model Track {
-  id             Int       @id @default(autoincrement())
-  trackName      String
-  artistName     String
-  albumName      String
-  bpm            Int
-  genre          String
-  instrumental   Boolean
-  voc            Boolean 
-  time           Int     
-  playlists      Playlist[] @relation("TrackPlaylists")
-  uploads        Upload[]
-  user           User?      @relation("UserTracks", fields: [userId], references: [id])
-  userId         Int?
-  edits          Edit[]
+  id           Int        @id @default(autoincrement())
+  trackName    String
+  artistName   String
+  albumName    String
+  bpm          Int
+  genre        String
+  instrumental Boolean
+  voc          Boolean
+  time         Int
+  playlists    Playlist[] @relation("TrackPlaylists")
+  uploads      Upload[]
+  user         User?      @relation("UserTracks", fields: [userId], references: [id])
+  userId       Int?
+  edits        Edit[]
 }
 
 model Upload {
-  id       Int    @id @default(autoincrement())
-  name     String
-  trackId  Int
-  track    Track  @relation(fields: [trackId], references: [id])
-  userId   Int
-  user     User   @relation(fields: [userId], references: [id])
+  id      Int    @id @default(autoincrement())
+  name    String
+  trackId Int
+  track   Track  @relation(fields: [trackId], references: [id])
+  userId  Int
+  user    User   @relation(fields: [userId], references: [id])
 }
 
 model Playlist {
-  id          Int       @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   description String
   ownerId     Int
-  owner       User      @relation(fields: [ownerId], references: [id])
-  tracks      Track[]   @relation("TrackPlaylists")
+  owner       User    @relation(fields: [ownerId], references: [id])
+  tracks      Track[] @relation("TrackPlaylists")
 }
 
 model Edit {
-  id                  Int       @id @default(autoincrement())
-  ownerId             Int
-  owner               User      @relation(fields: [ownerId], references: [id])
-  trackId             Int?
-  track               Track?    @relation(fields: [trackId], references: [id])
-  trackVocals         Boolean
-  trackInstrumental   Boolean
-  time                Int
-  pitch               Int
-  tempo               Decimal
-  loop                Boolean
-  effects             String
+  id                Int     @id @default(autoincrement())
+  ownerId           Int
+  owner             User    @relation(fields: [ownerId], references: [id])
+  trackId           Int?
+  track             Track?  @relation(fields: [trackId], references: [id])
+  trackVocals       Boolean
+  trackInstrumental Boolean
+  time              Int
+  pitch             Int
+  tempo             Decimal
+  loop              Boolean
+  effects           String
 }
