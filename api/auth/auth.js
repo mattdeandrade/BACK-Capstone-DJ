@@ -9,10 +9,9 @@ function createToken(id) {
 
 const prisma = require("../prisma");
 
-// Finds User according to token
 router.use(async (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader?.slice(7); // "Bearer <token>"
+  const token = authHeader?.slice(7);
   if (!token) return next();
 
   try {
