@@ -15,6 +15,7 @@ const seed = async (
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
   }));
+  await prisma.user.createMany({ data: users });
 
   const tracks = Array.from({ length: numTracks }, () => ({
     trackName: faker.music.songName(),
@@ -31,10 +32,8 @@ const seed = async (
     name: faker.name.zodiac(),
     description: faker.lorem.sentence(),
     ownerId: Math.floor(Math.random() * 50) + 1,
-    tracks: { create: tracks },
+    tracks: { connect: tracks },
   }));
-
-  await prisma.user.createMany({ data: users });
 
   const playlist = [];
   for (let i = 0; i < numUsers; i++) {
