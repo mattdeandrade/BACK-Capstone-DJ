@@ -24,6 +24,7 @@ const seed = async (
     genre: faker.music.genre(),
     instrumental: Math.random() < 0.5,
     voc: Math.random() < 0.5,
+    userId: Math.floor(Math.random() * numUsers) + 1,
   }));
 
   const playlists = Array.from({ length: numPlaylists }, () => ({
@@ -33,11 +34,11 @@ const seed = async (
     tracks: { create: tracks },
   }));
 
+  await prisma.user.createMany({ data: users });
+
   const playlist = [];
-  for (let i = 0; i < numTracks; i++) {
-    await prisma.track.create({
-      data: tracks,
-    });
+  for (let i = 0; i < numUsers; i++) {
+    await prisma.track.create({ data: tracks });
     for (let j = 0; j < numPlaylists; j++) {
       await prisma.playlist.create({
         data: playlists,
@@ -45,7 +46,6 @@ const seed = async (
     }
   }
 
-  await prisma.user.createMany({ data: users });
   const edits = Array.from({ length: numEdits }, () => ({
     ownerId: Math.floor(Math.random() * 50) + 1,
     trackId: Math.floor(Math.random() * numTracks) + 1,
