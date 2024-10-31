@@ -1,1 +1,6 @@
 @host = http://localhost:3000
+
+
+
+### Get all tracks
+GET {{host}}/tracks
