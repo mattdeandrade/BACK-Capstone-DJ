@@ -7,7 +7,7 @@ function createToken(id) {
   return jwt.sign({ id }, JWT_SECRET, { expiresIn: "1d" });
 }
 
-const prisma = require("../prisma");
+const prisma = require("../../prisma");
 
 router.use(async (req, res, next) => {
   const authHeader = req.headers.authorization;

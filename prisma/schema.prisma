@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,63 +11,77 @@ model User {
   id                 Int        @id @default(autoincrement())
   username           String     @unique
   password           String
-  playlists          Playlist[]
-  tracks             Track[]    @relation("UserTracks")
-  edits              Edit[]
-  uploads            Upload[]
   spotifyUsername    String?
   socialMediaAccount String?
   firstName          String
   lastName           String
   email              String     @unique
+  edits              Edit[]
+  playlists          Playlist[]
+  tracks             Track[]    @relation("UserTracks")
+  uploads            Upload[]
 }
 
 model Track {
-  id           Int        @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   trackName    String
   artistName   String
-  albumName    String
+  bitrate      Int       @default(320)
+  samplingrate Int       @default(44100)
+  channelmode  String    @default("stereo")
+  audioDataUrl String? //associate with users path on device
+  albumName    String?
   bpm          Int
   genre        String
   instrumental Boolean
-  voc          Boolean
-  time         Int
-  playlists    Playlist[] @relation("TrackPlaylists")
+  vocals       Boolean
+  duration     Int
+  userId       Int
+  playlistId   Int?
+  playlist     Playlist? @relation(fields: [playlistId], references: [id])
+  user         User?     @relation("UserTracks", fields: [userId], references: [id])
   uploads      Upload[]
-  user         User?      @relation("UserTracks", fields: [userId], references: [id])
-  userId       Int?
-  edits        Edit[]
 }
 
 model Upload {
-  id      Int    @id @default(autoincrement())
-  name    String
-  trackId Int
-  track   Track  @relation(fields: [trackId], references: [id])
-  userId  Int
-  user    User   @relation(fields: [userId], references: [id])
+  id           Int     @id @default(autoincrement())
+  name         String
+  trackId      Int
+  userId       Int
+  duration     Int
+  bitrate      Int     @default(320)
+  samplingrate Int     @default(44100)
+  channelmode  String  @default("stereo")
+  audioDataUrl String? //associate with users path on device
+  track        Track   @relation(fields: [trackId], references: [id])
+  user         User    @relation(fields: [userId], references: [id])
 }
 
 model Playlist {
   id          Int     @id @default(autoincrement())
   name        String
   description String
-  ownerId     Int
-  owner       User    @relation(fields: [ownerId], references: [id])
-  tracks      Track[] @relation("TrackPlaylists")
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  tracks      Track[]
 }
 
 model Edit {
-  id                Int     @id @default(autoincrement())
-  ownerId           Int
-  owner             User    @relation(fields: [ownerId], references: [id])
-  trackId           Int?
-  track             Track?  @relation(fields: [trackId], references: [id])
-  trackVocals       Boolean
-  trackInstrumental Boolean
-  time              Int
-  pitch             Int
-  tempo             Decimal
-  loop              Boolean
-  effects           String
+  id           Int      @id @default(autoincrement())
+  editName     String
+  artistName   String
+  vocals       Boolean
+  instrumental Boolean
+  duration     Int
+  pitch        Int
+  bpm          Int
+  genre        String
+  loop         Boolean?
+  effects      String
+  userId       Int
+  bitrate      Int      @default(320)
+  samplingrate Int      @default(44100)
+  channelmode  String   @default("stereo")
+  audioDataUrl String? //associate with users path on device
+  user         User     @relation(fields: [userId], references: [id])
 }
