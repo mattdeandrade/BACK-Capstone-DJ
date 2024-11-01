@@ -26,7 +26,7 @@ const seed = async (
   numEdits = 5
 ) => {
   const users = Array.from({ length: numUsers }, () => ({
-    username: faker.person.fullName(),
+    username: faker.internet.username(),
     password: faker.internet.password(),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),

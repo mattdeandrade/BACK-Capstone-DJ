@@ -20,6 +20,7 @@ model User {
   playlists          Playlist[]
   tracks             Track[]    @relation("UserTracks")
   uploads            Upload[]
+  admin              Boolean   @default(false)
 }
 
 model Track {
