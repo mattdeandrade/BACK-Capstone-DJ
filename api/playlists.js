@@ -9,9 +9,14 @@ const { authenticate } = require("./auth/auth");
 const prisma = require("../prisma");
 const { connect } = require("./tracks");
 
-router.get("/", async (req, res, next) => {
+router.get("/", authenticate, async (req, res, next) => {
   try {
-    const playlists = await prisma.track.findMany();
+    const playlists = await prisma.playlist.findMany();
+
+    if (req.user.admin === false) {
+      // Add admin bolean to user model
+      next({ status: 403, message: "You do not own this playlist." });
+    }
     res.json(playlists);
   } catch (e) {
     next(e);
@@ -32,6 +37,9 @@ router.post("/", authenticate, async (req, res, next) => {
       },
       include: { tracks: true },
     });
+    if (playlist.userId !== req.user.id) {
+      next({ status: 403, message: "You do not own this playlist." });
+    }
     res.status(201).json(playlist);
   } catch (e) {
     next(e);

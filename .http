@@ -3,16 +3,17 @@
 
 ### USER ACCESS REQUIRED AKA AUTHENTICATE
 
-### Register new customer
+### Register new USER or ADMIN!
 POST {{host}}/register
 Content-Type: application/json
 
 {
-  "username": "foobarbaz",
+  "username": "foobarbaz1",
   "password": "foobar",
-   "email": "love844jj8@gmail.com",
+   "email": "love844j2j8@gmail.com",
       "firstName": "Lovefooo",
-      "lastName": "Jonesfooo"
+      "lastName": "Jonesfooo",
+      "admin": true
 }
 
 ### Login
@@ -21,7 +22,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "foobarbaz",
+  "username": "foobarbaz1",
   "password": "foobar"
   
 }
@@ -35,6 +36,10 @@ Content-Type: application/json
   "username": "Shannon39",
   "password": "kdNZxaisK8iXcNa"
 }
+
+### Admin Routes
+GET {{host}}/playlists
+Authorization: Bearer {{token}}
 
 ###Post req to add tracks to our foobaarbaz account
 @token = {{login.response.body.token}}
@@ -63,7 +68,7 @@ Content-Type: application/json
 {
      "name": "Chill Vibe",
     "description": "It was a cold long day, its time to unwind",
-    "trackIds": 2507
+    "trackIds": [85,2507]
  
 }
 
