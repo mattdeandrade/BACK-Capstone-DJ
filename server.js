@@ -6,6 +6,15 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
+const morgan = require("morgan");
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+app.use(morgan("dev"));
+
 // JSON Parsing
 app.use(express.json());
 
@@ -14,12 +23,6 @@ app.use("/tracks", require("./api/tracks"));
 app.use("/edits", require("./api/edits"));
 app.use("/playlists", require("./api/playlists"));
 app.use("/uploads", require("./api/uploads.js"));
-
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.originalUrl}`);
-  next();
-});
 
 // 404
 app.use((req, res, next) => {

@@ -83,7 +83,7 @@ GET {{host}}/tracks/3
 GET {{host}}/tracks/6
 
 ### Add tracks to playlist
-PATCH {{host}}/playlists/51
+PATCH {{host}}/playlists/46
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

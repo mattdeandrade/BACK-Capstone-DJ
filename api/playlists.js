@@ -52,13 +52,20 @@ router.patch("/:id", authenticate, async (req, res, next) => {
   const { trackIds } = req.body;
   console.log(req.body);
 
-  // if (track.userId !== req.user.id) {
+  const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
+
+  // if (playlist.userId !== req.user.id) {
   //   return null;
   // }
 
   try {
-    const tracks = trackIds.map((id) => ({ id }));
     // console.log(tracks);
+    if (playlist.userId !== req.user.id) {
+      return next({ status: 403, message: "Nope. Sorry." });
+    }
+
+    const tracks = trackIds.map((id) => ({ id }));
+
     const playlists = await prisma.playlist.update({
       where: {
         id: +id,
@@ -68,6 +75,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
       },
       include: { tracks: true },
     });
+
     res.json(playlists);
   } catch (error) {
     next(error);
