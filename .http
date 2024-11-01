@@ -54,6 +54,19 @@ Content-Type: application/json
  
 }
 
+###Post req to add playlist to our foobaarbaz account
+
+POST {{host}}/playlists
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+     "name": "Chill Vibe",
+    "description": "It was a cold long day, its time to unwind",
+    "trackIds": 2507
+ 
+}
+
 
 ### Get all tracks
 GET {{host}}/tracks
