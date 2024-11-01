@@ -7,7 +7,6 @@ const { authenticate } = require("./auth/auth");
 
 //Primsa Client import
 const prisma = require("../prisma");
-const { connect } = require("./tracks");
 
 router.get("/", authenticate, async (req, res, next) => {
   try {
@@ -15,7 +14,7 @@ router.get("/", authenticate, async (req, res, next) => {
 
     if (req.user.admin === false) {
       // Add admin bolean to user model
-      next({ status: 403, message: "You do not own this playlist." });
+      next({ status: 403, message: "You do not have authorized access." });
     }
     res.json(playlists);
   } catch (e) {
@@ -43,5 +42,37 @@ router.post("/", authenticate, async (req, res, next) => {
     res.status(201).json(playlist);
   } catch (e) {
     next(e);
+  }
+});
+
+// Add single or multiple tracks to a user-owned playlist
+router.patch("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  const { trackIds } = req.body;
+  console.log(req.body);
+
+  const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
+
+  try {
+    // console.log(tracks);
+    if (playlist.userId !== req.user.id) {
+      return next({ status: 403, message: "Nope. Sorry." });
+    }
+
+    const tracks = trackIds.map((id) => ({ id }));
+
+    const playlists = await prisma.playlist.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        tracks: { connect: tracks },
+      },
+      include: { tracks: true },
+    });
+
+    res.json(playlists);
+  } catch (error) {
+    next(error);
   }
 });

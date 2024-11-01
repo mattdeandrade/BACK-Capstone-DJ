@@ -27,16 +27,6 @@ Content-Type: application/json
   
 }
 
-### Login with User in our database
-# @name login
-POST {{host}}/login
-Content-Type: application/json
-
-{
-  "username": "Shannon39",
-  "password": "kdNZxaisK8iXcNa"
-}
-
 ### Admin Routes
 GET {{host}}/playlists
 Authorization: Bearer {{token}}
@@ -48,7 +38,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "trackName": "Bloomfoo9",
+    "trackName": "Vibey",
     "artistName": "Foobloom9",
     "bitrate": 120,
     "bpm": 120,
@@ -68,7 +58,7 @@ Content-Type: application/json
 {
      "name": "Chill Vibe",
     "description": "It was a cold long day, its time to unwind",
-    "trackIds": [85,2507]
+    "trackIds": [2506]
  
 }
 
@@ -81,3 +71,32 @@ GET {{host}}/tracks/3
 
 ### Get tracks by id with playlist
 GET {{host}}/tracks/6
+
+### Add tracks to playlist
+PATCH {{host}}/playlists/46
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "trackIds": [2507, 2506]
+}
+
+### Get your tracks
+GET {{host}}/users/51/tracks
+Authorization: Bearer {{token}}
+
+### Get your playlists
+GET {{host}}/users/51/playlists
+Authorization: Bearer {{token}}
+
+### Get your edits
+GET {{host}}/users/51/edits
+Authorization: Bearer {{token}}
+
+### Get your uploads
+GET {{host}}/users/51/uploads
+Authorization: Bearer {{token}}
+
+### Get all users
+GET {{host}}/users
+Authorization: Bearer {{token}}
