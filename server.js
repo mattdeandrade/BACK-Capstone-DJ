@@ -35,6 +35,7 @@ app.use("/tracks", require("./api/tracks"));
 app.use("/edits", require("./api/edits"));
 app.use("/playlists", require("./api/playlists"));
 app.use("/uploads", require("./api/uploads.js"));
+app.use("/users", require("./api/users.js"));
 
 // 404
 app.use((req, res, next) => {

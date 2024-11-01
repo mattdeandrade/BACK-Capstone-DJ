@@ -27,16 +27,6 @@ Content-Type: application/json
   
 }
 
-### Login with User in our database
-# @name login
-POST {{host}}/login
-Content-Type: application/json
-
-{
-  "username": "Shannon39",
-  "password": "kdNZxaisK8iXcNa"
-}
-
 ### Admin Routes
 GET {{host}}/playlists
 Authorization: Bearer {{token}}
@@ -90,3 +80,23 @@ Authorization: Bearer {{token}}
 {
   "trackIds": [2507, 2506]
 }
+
+### Get your tracks
+GET {{host}}/users/51/tracks
+Authorization: Bearer {{token}}
+
+### Get your playlists
+GET {{host}}/users/51/playlists
+Authorization: Bearer {{token}}
+
+### Get your edits
+GET {{host}}/users/51/edits
+Authorization: Bearer {{token}}
+
+### Get your uploads
+GET {{host}}/users/51/uploads
+Authorization: Bearer {{token}}
+
+### Get all users
+GET {{host}}/users
+Authorization: Bearer {{token}}

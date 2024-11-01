@@ -7,7 +7,6 @@ const { authenticate } = require("./auth/auth");
 
 //Primsa Client import
 const prisma = require("../prisma");
-const { connect } = require("./tracks");
 
 router.get("/", authenticate, async (req, res, next) => {
   try {
@@ -53,10 +52,6 @@ router.patch("/:id", authenticate, async (req, res, next) => {
   console.log(req.body);
 
   const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
-
-  // if (playlist.userId !== req.user.id) {
-  //   return null;
-  // }
 
   try {
     // console.log(tracks);
