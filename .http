@@ -1,6 +1,63 @@
 @host = http://localhost:3000
 
 
+### USER ACCESS REQUIRED AKA AUTHENTICATE
+
+### Register new customer
+POST {{host}}/register
+Content-Type: application/json
+
+{
+  "username": "foobarbaz",
+  "password": "foobar",
+   "email": "love844jj8@gmail.com",
+      "firstName": "Lovefooo",
+      "lastName": "Jonesfooo"
+}
+
+### Login
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "username": "foobarbaz",
+  "password": "foobar"
+  
+}
+
+### Login with User in our database
+# @name login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+  "username": "Shannon39",
+  "password": "kdNZxaisK8iXcNa"
+}
+
+###Post req to add tracks to our foobaarbaz account
+POST {{host}}/tracks
+Content-Type: application/json
+{
+    "trackName": "Bloomfoo",
+    "artistName": "Foobloom",
+    "bitrate": 120,
+    "bpm": 120,
+    "genre": "blues",
+    "instrumental": false,
+    "vocals": false,
+    "duration": 1000,
+    "userId": 55,
+
+}
+
 
 ### Get all tracks
 GET {{host}}/tracks
+
+### Get tracks by id without playlist
+GET {{host}}/tracks/3
+
+### Get tracks by id with playlist
+GET {{host}}/tracks/6

@@ -1,11 +1,15 @@
+// Import Enviroment
+require("dotenv").config();
+
+// Define Express App
 const express = require("express");
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
-app.use("/tracks", require("./api/tracks"));
 app.use(require("./api/auth/auth.js").router);
+app.use("/tracks", require("./api/tracks"));
 app.use("/edits", require("./api/edits"));
 app.use("/playlists", require("./api/playlists"));
 app.use("/uploads", require("./api/uploads.js"));
