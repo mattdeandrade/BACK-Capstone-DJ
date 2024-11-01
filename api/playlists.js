@@ -15,7 +15,7 @@ router.get("/", authenticate, async (req, res, next) => {
 
     if (req.user.admin === false) {
       // Add admin bolean to user model
-      next({ status: 403, message: "You do not own this playlist." });
+      next({ status: 403, message: "You do not have authorized access." });
     }
     res.json(playlists);
   } catch (e) {
@@ -43,5 +43,33 @@ router.post("/", authenticate, async (req, res, next) => {
     res.status(201).json(playlist);
   } catch (e) {
     next(e);
+  }
+});
+
+// Add single or multiple tracks to a user-owned playlist
+router.patch("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  const { trackIds } = req.body;
+  console.log(req.body);
+
+  // if (track.userId !== req.user.id) {
+  //   return null;
+  // }
+
+  try {
+    const tracks = trackIds.map((id) => ({ id }));
+    // console.log(tracks);
+    const playlists = await prisma.playlist.update({
+      where: {
+        id: +id,
+      },
+      data: {
+        tracks: { connect: tracks },
+      },
+      include: { tracks: true },
+    });
+    res.json(playlists);
+  } catch (error) {
+    next(error);
   }
 });

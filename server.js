@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(err.status ?? 500);
-  res.json(err.message ?? "Sorry, something went wrong :(");
+  res.send(err.message ?? "Sorry, something went wrong :(");
 });
 
 app.listen(PORT, () => {
