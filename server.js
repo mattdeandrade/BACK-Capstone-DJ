@@ -5,6 +5,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const PORT = 3000;
+const rateLimit = require("express-rate-limit");
 
 const morgan = require("morgan");
 
@@ -14,6 +15,17 @@ app.use((req, res, next) => {
   next();
 });
 app.use(morgan("dev"));
+
+// Define the rate limiter
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour window
+  max: 10000, // Limit each IP to 10,000 requests per windowMs
+  message: "Rate limit exceeded. Try again after an hour.",
+  standardHeaders: true, // Sends rate limit info in headers
+  legacyHeaders: false, // Disables `X-RateLimit-*` headers
+});
+
+app.use("/api", limiter);
 
 // JSON Parsing
 app.use(express.json());
