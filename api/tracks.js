@@ -36,10 +36,20 @@ router.get("/:id", authenticate, async (req, res, next) => {
 
 // POST Tracks
 router.post("/", authenticate, async (req, res, next) => {
-  const { name, description, trackIds } = req.body;
+  const {
+    trackName,
+    artistName,
+    bitrate,
+    bpm,
+    genre,
+    instrumental,
+    vocals,
+    duration,
+    playlistId,
+  } = req.body;
+  console.log(req.body);
   try {
-    const tracks = trackIds.map((id) => ({ id }));
-    const playlist = await prisma.playlist.create({
+    const track = await prisma.track.create({
       data: {
         trackName,
         artistName,
@@ -50,10 +60,10 @@ router.post("/", authenticate, async (req, res, next) => {
         vocals,
         duration,
         userId: req.user.id,
-        playlist: { connect: playlist },
+        playlistId,
       },
     });
-    res.status(201).json(playlist);
+    res.status(201).json(track);
   } catch (e) {
     next(e);
   }

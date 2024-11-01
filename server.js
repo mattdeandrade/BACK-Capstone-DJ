@@ -6,6 +6,7 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
+// JSON Parsing
 app.use(express.json());
 
 app.use(require("./api/auth/auth.js").router);

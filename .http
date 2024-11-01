@@ -37,19 +37,21 @@ Content-Type: application/json
 }
 
 ###Post req to add tracks to our foobaarbaz account
+@token = {{login.response.body.token}}
 POST {{host}}/tracks
+Authorization: Bearer {{token}}
 Content-Type: application/json
+
 {
-    "trackName": "Bloomfoo",
-    "artistName": "Foobloom",
+    "trackName": "Bloomfoo9",
+    "artistName": "Foobloom9",
     "bitrate": 120,
     "bpm": 120,
     "genre": "blues",
     "instrumental": false,
     "vocals": false,
-    "duration": 1000,
-    "userId": 55,
-
+    "duration": 1000
+ 
 }
 
 
