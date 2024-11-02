@@ -12,6 +12,12 @@ const prisma = require("../prisma");
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const tracks = await prisma.track.findMany();
+
+    if (req.user.admin === false) {
+      // Add admin bolean to user model
+      next({ status: 403, message: "You do not authorized access." });
+    }
+
     res.json(tracks);
   } catch (e) {
     next(e);
@@ -28,6 +34,9 @@ router.get("/:id", authenticate, async (req, res, next) => {
     const track = await prisma.track.findUniqueOrThrow({
       where: { id: +id },
     });
+    if (track.userId !== req.user.id) {
+      return null;
+    }
     res.json(track);
   } catch (e) {
     next(e);
