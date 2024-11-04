@@ -76,3 +76,17 @@ router.patch("/:id", authenticate, async (req, res, next) => {
     next(error);
   }
 });
+router.delete("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
+    if (!playlist || playlist.userId !== req.user.id) {
+      return next({ status: 403, message: "You do not have access to this playlist." });
+    }
+    await prisma.playlist.delete({ where: { id: +id } });
+    res.status(204).send(); // No content to send back
+  } catch (e) {
+    next(e);
+  }
+});
+

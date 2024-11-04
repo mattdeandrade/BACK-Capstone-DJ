@@ -21,3 +21,45 @@ router.get("/", authenticate, async (req, res, next) => {
     next(e);
   }
 });
+
+router.post("/", authenticate, async (req, res, next) => {
+  const {
+    editName,
+    artistName,
+    vocals,
+    instrumental,
+    duration,
+    pitch,
+    bpm,
+    genre,
+    loop,
+    effects,
+    bitrate,
+    samplingrate,
+    channelmode,
+  } = req.body;
+
+  try {
+    const edit = await prisma.edit.create({
+      data: {
+        editName,
+        artistName,
+        vocals,
+        instrumental,
+        duration,
+        pitch,
+        bpm,
+        genre,
+        loop,
+        effects,
+        userId: req.user.id,
+        bitrate,
+        samplingrate,
+        channelmode,
+      },
+    });
+    res.json(edit);
+  } catch (error) {
+    next(error);
+  }
+});

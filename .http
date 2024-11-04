@@ -1,6 +1,33 @@
 @host = http://localhost:3000
 
 
+//finish delete routes for all
+//finish patch routes:
+// edits - All fields
+// uploads - edit name
+// users route - get account information for user. name, email, lastname,
+// we should test editing a mp3 with a req, and also storing and fetching
+// actual mp3 files versus seeded data. Install ffmpeg depency
+// convert uploaded mp4 to mp3 through upload route
+// try using ffmpeg editing functions on edit routes
+
+//wednesday
+//finish leftover from tuesday
+//Spotify API connection
+
+//thursday
+//finish wed + tues
+//catchup with fontend
+
+//stretch goals: 
+//account creation? time editing? leaderboard?
+//social media people vote on public uploads, somebody could have highest rated
+//uploads and be number 1 on leaderboard for content.
+
+
+
+
+
 ### USER ACCESS REQUIRED AKA AUTHENTICATE
 
 ### Register new USER or ADMIN!
@@ -8,12 +35,12 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-  "username": "foobarbaz1",
+  "username": "foobat8755564",
   "password": "foobar",
-   "email": "love844j2j8@gmail.com",
-      "firstName": "Lovefooo",
-      "lastName": "Jonesfooo",
-      "admin": true
+   "email": "foobat435723@yahoo.com",
+      "firstName": "Lov75e2fefwfooo",
+      "lastName": "Jone7s5fweffooo",
+      "admin": false
 }
 
 ### Login
@@ -22,7 +49,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "foobarbaz1",
+  "username": "foobat8755564",
   "password": "foobar"
   
 }
@@ -92,11 +119,70 @@ Authorization: Bearer {{token}}
 ### Get your edits
 GET {{host}}/users/51/edits
 Authorization: Bearer {{token}}
+### create new edit
+POST {{host}}/edits/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+ "editName": "editName", 
+   "artistName": "artistName",
+   "vocals": false, 
+  "instrumental": true, 
+   "duration": 2000, 
+   "pitch": 400, 
+   "bpm": 120, 
+  "genre": "pop", 
+"loop": false, 
+"effects": "reverb"
+}
+
+### Create a upload
+POST {{host}}/uploads/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+ {
+
+"name": "Upload",
+"duration": 2000
+
+ }
+
 
 ### Get your uploads
 GET {{host}}/users/51/uploads
 Authorization: Bearer {{token}}
 
+
+
+### get upload by ID for user
+GET {{host}}/users/51/uploads/1/
+Authorization: Bearer {{token}}
+ 
+
 ### Get all users
 GET {{host}}/users
 Authorization: Bearer {{token}}
+
+
+### get track by ID for user
+GET {{host}}/users/51/tracks/2506/
+Authorization: Bearer {{token}}
+ 
+
+ 
+### get playlist by ID for user
+GET {{host}}/users/51/playlists/51/
+Authorization: Bearer {{token}}
+
+
+### get edit by ID for user
+GET {{host}}/users/51/edits/6/
+Authorization: Bearer {{token}}
+ 
+### get upload by ID for user
+GET {{host}}/users/51/uploads/6/
+Authorization: Bearer {{token}}
+ 
+
