@@ -104,14 +104,14 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackId } = req.params;
 
-  try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these tracks.",
-      });
-    }
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these tracks.",
+    });
+  }
 
+  try {
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: +id },
     });
@@ -133,59 +133,101 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   }
 });
 
-router.get("/:id/playlists", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+router.get(
+  "/:id/playlists/:playlistId",
+  authenticate,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { playlistId } = req.params;
 
-  try {
     if (req.user.id !== +id) {
       next({
         status: 403,
         message: "You do not have access to these playlists.",
       });
     }
-    const userPlaylists = await prisma.playlist.findMany({
-      where: { userId: +id },
+
+    try {
+      const user = await prisma.user.findUniqueOrThrow({
+        where: { id: +id },
+      });
+
+      const userPlaylist = await prisma.playlist.findUniqueOrThrow({
+        where: { id: +playlistId },
+        include: { tracks: true },
+      });
+
+      if (user.id !== userPlaylist.userId) {
+        next({
+          status: 403,
+          message: "User does not own this playlist.",
+        });
+      }
+
+      res.json(userPlaylist);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  const { editId } = req.params;
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these edits.",
+    });
+  }
+  try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +id },
     });
 
-    res.json(userPlaylists);
+    const userEdit = await prisma.edit.findUniqueOrThrow({
+      where: { id: +editId },
+    });
+
+    if (user.id !== userEdit.userId) {
+      next({
+        status: 403,
+        message: "User does not own this Edit.",
+      });
+    }
+
+    res.json(userEdit);
   } catch (error) {
     next(error);
   }
 });
 
-router.get("/:id/edits", authenticate, async (req, res, next) => {
+router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
   const { id } = req.params;
-
-  try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these edits.",
-      });
-    }
-    const userEdits = await prisma.edit.findMany({ where: { userId: +id } });
-
-    res.json(userEdits);
-  } catch (error) {
-    next(error);
+  const { uploadId } = req.params;
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these uploads.",
+    });
   }
-});
-
-router.get("/:id/uploads", authenticate, async (req, res, next) => {
-  const { id } = req.params;
-
   try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these uploads.",
-      });
-    }
-    const userUploads = await prisma.upload.findMany({
-      where: { userId: +id },
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +id },
     });
 
-    res.json(userUploads);
+    const userUpload = await prisma.upload.findUniqueOrThrow({
+      where: { id: +uploadId },
+    });
+
+    if (user.id !== userUpload.userId) {
+      next({
+        status: 403,
+        message: "User does not own this Edit.",
+      });
+    }
+
+    res.json(userUpload);
   } catch (error) {
     next(error);
   }

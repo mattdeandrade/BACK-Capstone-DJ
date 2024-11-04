@@ -20,7 +20,7 @@ model User {
   playlists          Playlist[]
   tracks             Track[]    @relation("UserTracks")
   uploads            Upload[]
-  admin              Boolean   @default(false)
+  admin              Boolean    @default(false)
 }
 
 model Track {
@@ -41,20 +41,17 @@ model Track {
   playlistId   Int?
   playlist     Playlist? @relation(fields: [playlistId], references: [id])
   user         User?     @relation("UserTracks", fields: [userId], references: [id])
-  uploads      Upload[]
 }
 
 model Upload {
   id           Int     @id @default(autoincrement())
   name         String
-  trackId      Int
   userId       Int
   duration     Int
   bitrate      Int     @default(320)
   samplingrate Int     @default(44100)
   channelmode  String  @default("stereo")
   audioDataUrl String? //associate with users path on device
-  track        Track   @relation(fields: [trackId], references: [id])
   user         User    @relation(fields: [userId], references: [id])
 }
 

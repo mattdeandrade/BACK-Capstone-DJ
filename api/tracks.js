@@ -14,7 +14,6 @@ router.get("/", authenticate, async (req, res, next) => {
     const tracks = await prisma.track.findMany();
 
     if (req.user.admin === false) {
-      // Add admin bolean to user model
       next({ status: 403, message: "You do not authorized access." });
     }
 
@@ -56,7 +55,6 @@ router.post("/", authenticate, async (req, res, next) => {
     duration,
     playlistId,
   } = req.body;
-  console.log(req.body);
   try {
     const track = await prisma.track.create({
       data: {
