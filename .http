@@ -1,22 +1,6 @@
 @host = http://localhost:3000
 
-//finish delete routes for all - done
-//finish patch routes
-// edits - All fields
-// uploads - edit name
-// users route - get account information for user. name, email, lastname,
-// we should test editing a mp3 with a req, and also storing and fetching
-// actual mp3 files versus seeded data. Install ffmpeg depency
-// convert uploaded mp4 to mp3 through upload route
-// try using ffmpeg editing functions on edit routes
 
-//wednesday
-//finish leftover from tuesday
- //Spotify API connection
-
-//thursday
-//finish wed + tues
-//catchup with fontend
 
 
 
@@ -110,6 +94,10 @@ Authorization: Bearer {{token}}
 {
   "trackIds": [2507, 2506]
 }
+
+### Get your info
+GET {{host}}/users/52
+Authorization: Bearer {{token}}
 
 ### Get your tracks
 GET {{host}}/users/51/tracks
