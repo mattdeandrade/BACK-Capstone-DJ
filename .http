@@ -1,13 +1,5 @@
 @host = http://localhost:3000
 
-
-
-
-
-
-
-
-
 ### USER ACCESS REQUIRED AKA AUTHENTICATE
 
 ### Register new USER or ADMIN!
