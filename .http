@@ -147,7 +147,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "editName": "A Thing",
+  "editName": "A Thing 3",
   "artistName": "Crime Mob",
   "vocals": true,
   "instrumental": false
@@ -171,6 +171,14 @@ Content-Type: application/json
 
  }
 
+### Update an upload
+PATCH {{host}}/uploads/3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Upload Revised 4"
+}
 
 ###Delete upload
 DELETE {{host}}/uploads/4
@@ -181,7 +189,7 @@ Content-Type: application/json
 
 
 ### Get your uploads
-GET {{host}}/users/51/uploads
+GET {{host}}/users/52/uploads
 Authorization: Bearer {{token}}
 
 
@@ -212,7 +220,7 @@ GET {{host}}/users/51/edits/6/
 Authorization: Bearer {{token}}
  
 ### get upload by ID for user
-GET {{host}}/users/51/uploads/6/
+GET {{host}}/users/51/uploads/
 Authorization: Bearer {{token}}
  
 

@@ -82,6 +82,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
     samplingrate,
     channelmode,
   } = req.body;
+
   try {
     const updatedEdit = await prisma.edit.update({
       where: { id: +id },
@@ -102,12 +103,14 @@ router.patch("/:id", authenticate, async (req, res, next) => {
         userId: req.user.id,
       },
     });
-    if (req.user.id !== id.userId) {
+
+    if (req.user.id !== updatedEdit.userId) {
       return next({
         status: 403,
-        message: "You do not have access to this edit",
+        message: "You do not have access to this edit.",
       });
     }
+
     res.status(200).json(updatedEdit);
   } catch (error) {
     next(error);
