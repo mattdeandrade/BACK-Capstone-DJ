@@ -7,7 +7,8 @@ const { authenticate } = require("./auth/auth");
 
 //Primsa Client import
 const prisma = require("../prisma");
-//get all routes for a single user
+
+// Admin can get a list of all users
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const users = await prisma.user.findMany();
@@ -22,6 +23,23 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
+// Get all info for the signed-in user
+router.get("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = await prisma.user.findUniqueOrThrow({ where: { id: +id } });
+
+    if (req.user.id !== user.id) {
+      next({ status: 403, message: "You are not the authorized user." });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all of the signed-in user's tracks
 router.get("/:id/tracks", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
@@ -40,6 +58,7 @@ router.get("/:id/tracks", authenticate, async (req, res, next) => {
   }
 });
 
+// Get all of the signed-in user's playlists
 router.get("/:id/playlists", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
@@ -60,6 +79,7 @@ router.get("/:id/playlists", authenticate, async (req, res, next) => {
   }
 });
 
+// Get all of the signed-in user's edits
 router.get("/:id/edits", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
@@ -78,6 +98,7 @@ router.get("/:id/edits", authenticate, async (req, res, next) => {
   }
 });
 
+// Get all of the signed in user's uploads
 router.get("/:id/uploads", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
@@ -100,6 +121,7 @@ router.get("/:id/uploads", authenticate, async (req, res, next) => {
 
 //getbyid routes for a single user
 
+// Get a specific track owned by the signed-in user
 router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackId } = req.params;
@@ -133,6 +155,7 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   }
 });
 
+// Get a specific playlist owned by the signed in user
 router.get(
   "/:id/playlists/:playlistId",
   authenticate,
@@ -171,6 +194,7 @@ router.get(
   }
 );
 
+// Gets a specific edit owned by the signed-in user
 router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { editId } = req.params;
@@ -202,6 +226,7 @@ router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
   }
 });
 
+// Gets a specific upload owned by the signed in user
 router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { uploadId } = req.params;

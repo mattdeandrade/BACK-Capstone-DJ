@@ -64,6 +64,59 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
+// Update edit choices as the user works on an edit
+router.patch("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  const {
+    editName,
+    artistName,
+    vocals,
+    instrumental,
+    duration,
+    pitch,
+    bpm,
+    genre,
+    loop,
+    effects,
+    bitrate,
+    samplingrate,
+    channelmode,
+  } = req.body;
+
+  try {
+    const updatedEdit = await prisma.edit.update({
+      where: { id: +id },
+      data: {
+        editName,
+        artistName,
+        vocals,
+        instrumental,
+        duration,
+        pitch,
+        bpm,
+        genre,
+        loop,
+        effects,
+        bitrate,
+        samplingrate,
+        channelmode,
+        userId: req.user.id,
+      },
+    });
+
+    if (req.user.id !== updatedEdit.userId) {
+      return next({
+        status: 403,
+        message: "You do not have access to this edit.",
+      });
+    }
+
+    res.status(200).json(updatedEdit);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   try {

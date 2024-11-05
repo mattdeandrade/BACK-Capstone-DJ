@@ -40,6 +40,33 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
+// Update the name of an upload
+router.patch("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  const { name } = req.body;
+
+  try {
+    const updatedUpload = await prisma.upload.update({
+      where: { id: +id },
+      data: {
+        name,
+        userId: req.user.id,
+      },
+    });
+
+    if (req.user.id !== updatedUpload.userId) {
+      return next({
+        status: 403,
+        message: "You do not have access to this upload.",
+      });
+    }
+
+    res.status(200).json(updatedUpload);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   try {
