@@ -63,3 +63,20 @@ router.post("/", authenticate, async (req, res, next) => {
     next(error);
   }
 });
+
+router.delete("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const edit = await prisma.edit.findUnique({ where: { id: +id } });
+    if (req.user.id !== edit.userId) {
+      return next({
+        status: 403,
+        message: "You do not have access to this.",
+      });
+    }
+    await prisma.edit.delete({ where: { id: +id } });
+    res.status(204).send(); // No content to send back
+  } catch (e) {
+    next(e);
+  }
+});
