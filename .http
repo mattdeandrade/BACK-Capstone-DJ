@@ -1,8 +1,7 @@
 @host = http://localhost:3000
 
-
 //finish delete routes for all
-//finish patch routes:
+//finish patch routes:  - done.
 // edits - All fields
 // uploads - edit name
 // users route - get account information for user. name, email, lastname,
@@ -13,16 +12,13 @@
 
 //wednesday
 //finish leftover from tuesday
-//Spotify API connection
+ //Spotify API connection
 
 //thursday
 //finish wed + tues
 //catchup with fontend
 
-//stretch goals: 
-//account creation? time editing? leaderboard?
-//social media people vote on public uploads, somebody could have highest rated
-//uploads and be number 1 on leaderboard for content.
+
 
 
 
@@ -58,7 +54,7 @@ Content-Type: application/json
 GET {{host}}/playlists
 Authorization: Bearer {{token}}
 
-###Post req to add tracks to our foobaarbaz account
+###Add a track 
 @token = {{login.response.body.token}}
 POST {{host}}/tracks
 Authorization: Bearer {{token}}
@@ -75,6 +71,13 @@ Content-Type: application/json
     "duration": 1000
  
 }
+
+
+###Delete track
+DELETE {{host}}/tracks/2508
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 
 ###Post req to add playlist to our foobaarbaz account
 
@@ -137,6 +140,13 @@ Content-Type: application/json
 "effects": "reverb"
 }
 
+
+
+###Delete Edit
+DELETE {{host}}/edits/8
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 ### Create a upload
 POST {{host}}/uploads/
 Authorization: Bearer {{token}}
@@ -148,6 +158,14 @@ Content-Type: application/json
 "duration": 2000
 
  }
+
+
+###Delete upload
+DELETE {{host}}/uploads/4
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+
 
 
 ### Get your uploads

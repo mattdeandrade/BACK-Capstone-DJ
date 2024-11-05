@@ -223,7 +223,7 @@ router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
     if (user.id !== userUpload.userId) {
       next({
         status: 403,
-        message: "User does not own this Edit.",
+        message: "User does not own this.",
       });
     }
 

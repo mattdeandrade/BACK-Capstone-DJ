@@ -39,3 +39,20 @@ router.post("/", authenticate, async (req, res, next) => {
     next({ error });
   }
 });
+
+router.delete("/:id", authenticate, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const upload = await prisma.upload.findUnique({ where: { id: +id } });
+    if (req.user.id !== upload.userId) {
+      return next({
+        status: 403,
+        message: "You do not have access to this.",
+      });
+    }
+    await prisma.upload.delete({ where: { id: +id } });
+    res.status(204).send();
+  } catch (e) {
+    next(e);
+  }
+});
