@@ -1,7 +1,7 @@
 @host = http://localhost:3000
 
 //finish delete routes for all
-//finish patch routes:
+//finish patch routes:  - done.
 // edits - All fields
 // uploads - edit name
 // users route - get account information for user. name, email, lastname,
