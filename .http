@@ -49,8 +49,7 @@ POST {{host}}/login
 Content-Type: application/json
 
 {
-  "username": "foobat8755564",
-  "password": "foobar"
+"username": "foobat8755564", "password": "foobar"
   
 }
 
@@ -110,15 +109,15 @@ Authorization: Bearer {{token}}
 }
 
 ### Get your tracks
-GET {{host}}/users/51/tracks
+GET {{host}}/users/tracks
 Authorization: Bearer {{token}}
 
 ### Get your playlists
-GET {{host}}/users/51/playlists
+GET {{host}}/users/playlists
 Authorization: Bearer {{token}}
 
 ### Get your edits
-GET {{host}}/users/51/edits
+GET {{host}}/users/edits
 Authorization: Bearer {{token}}
 ### create new edit
 POST {{host}}/edits/
@@ -152,13 +151,13 @@ Content-Type: application/json
 
 
 ### Get your uploads
-GET {{host}}/users/51/uploads
+GET {{host}}/users/uploads
 Authorization: Bearer {{token}}
 
 
 
 ### get upload by ID for user
-GET {{host}}/users/51/uploads/1/
+GET {{host}}/users/uploads/1/
 Authorization: Bearer {{token}}
  
 
@@ -168,22 +167,22 @@ Authorization: Bearer {{token}}
 
 
 ### get track by ID for user
-GET {{host}}/users/51/tracks/2506/
+GET {{host}}/users/tracks/2506/
 Authorization: Bearer {{token}}
  
 
  
 ### get playlist by ID for user
-GET {{host}}/users/51/playlists/51/
+GET {{host}}/users/playlists/51/
 Authorization: Bearer {{token}}
 
 
 ### get edit by ID for user
-GET {{host}}/users/51/edits/6/
+GET {{host}}/users/edits/6/
 Authorization: Bearer {{token}}
  
 ### get upload by ID for user
-GET {{host}}/users/51/uploads/6/
+GET {{host}}/users/uploads/6/
 Authorization: Bearer {{token}}
  
 

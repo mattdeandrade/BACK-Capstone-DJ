@@ -7,6 +7,9 @@ const app = express();
 const PORT = 3000;
 const rateLimit = require("express-rate-limit");
 
+const cors = require("cors");
+app.use(cors({ origin: /localhost/ }));
+
 const morgan = require("morgan");
 
 // Logging middleware

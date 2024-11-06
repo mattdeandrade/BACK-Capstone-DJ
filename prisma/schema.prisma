@@ -39,7 +39,7 @@ model Track {
   duration     Int
   userId       Int
   playlistId   Int?
-  playlist     Playlist? @relation(fields: [playlistId], references: [id])
+  playlist     Playlist? @relation("PlaylistTracks", fields: [playlistId], references: [id])
   user         User?     @relation("UserTracks", fields: [userId], references: [id])
 }
 
@@ -61,7 +61,7 @@ model Playlist {
   description String
   userId      Int
   user        User    @relation(fields: [userId], references: [id])
-  tracks      Track[]
+  tracks      Track[] @relation("PlaylistTracks")
 }
 
 model Edit {
