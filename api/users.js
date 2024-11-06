@@ -23,11 +23,13 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Get all info for the signed-in user
-router.get("/:id", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+// Get all account info for the signed-in user
+router.get("/myprofile", authenticate, async (req, res, next) => {
+  const user = req.user;
   try {
-    const user = await prisma.user.findUniqueOrThrow({ where: { id: +id } });
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +user.id },
+    });
 
     if (req.user.id !== user.id) {
       next({ status: 403, message: "You are not the authorized user." });
@@ -40,17 +42,13 @@ router.get("/:id", authenticate, async (req, res, next) => {
 });
 
 // Get all of the signed-in user's tracks
-router.get("/:id/tracks", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+router.get("/tracks", authenticate, async (req, res, next) => {
+  const user = req.user;
 
   try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these tracks.",
-      });
-    }
-    const userTracks = await prisma.track.findMany({ where: { userId: +id } });
+    const userTracks = await prisma.track.findMany({
+      where: { userId: +user.id },
+    });
 
     res.json(userTracks);
   } catch (error) {

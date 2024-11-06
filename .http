@@ -187,6 +187,10 @@ Authorization: Bearer {{token}}
 ### get track by ID for user
 GET {{host}}/users/51/tracks/2506/
 Authorization: Bearer {{token}}
+
+### Get All Tracks by User
+GET {{host}}/users/tracks
+Authorization: Bearer {{token}}
  
 
  

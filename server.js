@@ -37,6 +37,9 @@ app.use("/playlists", require("./api/playlists"));
 app.use("/uploads", require("./api/uploads.js"));
 app.use("/users", require("./api/users.js"));
 
+/// Need to connect mp3 files on repo to send upload requests ???
+// require ("./mp3") add to app.use/uploads
+
 // 404
 app.use((req, res, next) => {
   next({ status: 404, message: "Endpoint not found." });

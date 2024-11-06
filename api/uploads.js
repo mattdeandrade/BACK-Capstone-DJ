@@ -1,6 +1,12 @@
+// Import Express and define Express router to export
 const express = require("express");
 const router = express.Router();
 module.exports = router;
+
+// For handling audio file uploads
+// multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
+const multer = require("multer");
+const audiofiles = multer({ dest: "uploads/" }); // Temporarily save file to local storage
 
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
@@ -21,6 +27,7 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
+// Store audiofile uploads metadata in Prisma
 router.post("/", authenticate, async (req, res, next) => {
   const { name, duration, bitrate, samplingrate } = req.body;
 
