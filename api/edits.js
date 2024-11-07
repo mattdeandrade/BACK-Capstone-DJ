@@ -2,6 +2,13 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
+// For handling audio file uploads
+// multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
+const multer = require("multer");
+
+// Require Upload audio file function import
+const { audiofileUpload } = require("./multer"); 
+
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
 
@@ -22,47 +29,61 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.post("/", authenticate, async (req, res, next) => {
-  const {
-    editName,
-    artistName,
-    vocals,
-    instrumental,
-    duration,
-    pitch,
-    bpm,
-    genre,
-    loop,
-    effects,
-    bitrate,
-    samplingrate,
-    channelmode,
-  } = req.body;
+router.post(
+  "/",
+  authenticate,
+  audiofileUpload.single("mp3"),
+  async (req, res, next) => {
+    const {
+      editName,
+      artistName,
+      vocals,
+      instrumental,
+      duration,
+      pitch,
+      bpm,
+      genre,
+      loop,
+      effects,
+      bitrate,
+      samplingrate,
+      channelmode,
+    } = req.body;
 
-  try {
-    const edit = await prisma.edit.create({
-      data: {
-        editName,
-        artistName,
-        vocals,
-        instrumental,
-        duration,
-        pitch,
-        bpm,
-        genre,
-        loop,
-        effects,
-        userId: req.user.id,
-        bitrate,
-        samplingrate,
-        channelmode,
-      },
-    });
-    res.json(edit);
-  } catch (error) {
-    next(error);
+  const file = req.file;
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    try {
+      const newEdit = await prisma.edit.create({
+        data: {
+          editName,
+          artistName,
+          vocals,
+          instrumental,
+          duration,
+          pitch,
+          bpm,
+          genre,
+          loop,
+          effects,
+          userId: req.user.id,
+          bitrate,
+          samplingrate,
+          channelmode,
+          audioDataUrl: file.path,
+        },
+      });
+      res.status(201).json({
+        message: "MP3 Edit uploaded successfully!",
+        file: newEdit,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 // Update edit choices as the user works on an edit
 router.patch("/:id", authenticate, async (req, res, next) => {
