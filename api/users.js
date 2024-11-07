@@ -22,8 +22,8 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-router.get("/:id/tracks", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+router.get("/tracks", authenticate, async (req, res, next) => {
+  const user = user.id;
 
   try {
     if (req.user.id !== +id) {
@@ -40,7 +40,7 @@ router.get("/:id/tracks", authenticate, async (req, res, next) => {
   }
 });
 
-router.get("/:id/playlists", authenticate, async (req, res, next) => {
+router.get("/playlists", authenticate, async (req, res, next) => {
   const { id } = req.params;
 
   try {
