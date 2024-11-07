@@ -6,7 +6,7 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const rateLimit = require("express-rate-limit");
-
+const multer = require("multer");
 const morgan = require("morgan");
 
 // Logging middleware
@@ -29,6 +29,8 @@ app.use("/api", limiter);
 
 // JSON Parsing
 app.use(express.json());
+
+app.use(multer);
 
 // Uplolad file storage
 //app.use("/multer", require("./api/multer.js"));

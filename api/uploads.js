@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
-
 // For handling audio file uploads
 // multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
 const multer = require("multer");
@@ -38,12 +37,12 @@ router.post(
   audiofileUpload.single("mp3"),
   async (req, res, next) => {
     const { duration, bitrate, samplingrate } = req.body;
-   console.log(req.body);
+    console.log(req.body);
     const file = req.file;
-     if (!file) {
-       return res.status(400).send("No file uploaded.");
-     }
 
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
 
     try {
       const newUpload = await prisma.upload.create({

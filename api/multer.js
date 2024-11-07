@@ -29,7 +29,8 @@ const audiofileUpload = multer({
   storage: storage,
   limits: { fileSize: 50 * 1024 * 1024 }, // Limit file size to 50MB
   fileFilter: (req, file, cb) => {
-    const fileTypes = /mp3|mpeg/;
+    // Regular expression to validate MP3 files by MIME type
+    const fileTypes = /audio\/mpeg/;
     const extname = fileTypes.test(
       path.extname(file.originalname).toLowerCase()
     );
