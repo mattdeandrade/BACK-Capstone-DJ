@@ -13,7 +13,8 @@
     "express-rate-limit": "^7.4.1",
     "fluent-ffmpeg": "^2.1.3",
     "jsonwebtoken": "^9.0.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "path": "^0.12.7"
   },
   "scripts": {
     "dev": "nodemon server.js",

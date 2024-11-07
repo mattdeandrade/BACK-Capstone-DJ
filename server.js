@@ -30,6 +30,9 @@ app.use("/api", limiter);
 // JSON Parsing
 app.use(express.json());
 
+// Uplolad file storage
+app.use("/multer", require("./api/multer.js"));
+
 app.use(require("./api/auth/auth.js").router);
 app.use("/tracks", require("./api/tracks"));
 app.use("/edits", require("./api/edits"));

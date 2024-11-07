@@ -11,8 +11,12 @@ const audiofiles = multer({ dest: "uploads/" }); // Temporarily save file to loc
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
 
+// Require Upload audio file import
+const { audifileUpload } = require("./multer"); // change name??
+
 //Primsa Client import
 const prisma = require("../prisma");
+const audiofileUpload = require("./multer");
 
 router.get("/", authenticate, async (req, res, next) => {
   if (req.user.admin === false) {
@@ -27,25 +31,34 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Store audiofile uploads metadata in Prisma
-router.post("/", authenticate, async (req, res, next) => {
-  const { name, duration, bitrate, samplingrate } = req.body;
-
-  try {
-    const upload = await prisma.upload.create({
-      data: {
-        name,
-        userId: req.user.id,
-        duration,
-        bitrate,
-        samplingrate,
-      },
-    });
-    res.status(201).json(upload);
-  } catch (error) {
-    next({ error });
+// Post audiofile uploads metadata in Prisma
+router.post(
+  "/",
+  authenticate,
+  audiofileUpload.single("mp3"),
+  async (req, res, next) => {
+    const { name, duration, bitrate, samplingrate } = req.body;
+    const upload = req.upload;
+    try {
+      const newUpload = await prisma.upload.create({
+        data: {
+          name: upload.originalname,
+          userId: req.user.id,
+          duration,
+          bitrate,
+          samplingrate,
+          audioDataUrl: upload.path,
+        },
+      });
+      res.status(201).json({
+        message: "MP3 uploaded successfully!",
+        upload: newUpload,
+      });
+    } catch (error) {
+      next({ error });
+    }
   }
-});
+);
 
 // Update the name of an upload
 router.patch("/:id", authenticate, async (req, res, next) => {

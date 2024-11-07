@@ -45,7 +45,7 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Add single or multiple tracks to a user-owned playlist
+// Add single or multiple tracks to a specific user-owned playlist
 router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackIds } = req.body;
