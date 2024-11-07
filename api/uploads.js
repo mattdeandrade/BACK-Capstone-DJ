@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
+
 // For handling audio file uploads
 // multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
 const multer = require("multer");
@@ -12,11 +13,10 @@ const audiofiles = multer({ dest: "uploads/" }); // Temporarily save file to loc
 const { authenticate } = require("./auth/auth");
 
 // Require Upload audio file import
-const { audifileUpload } = require("./multer"); // change name??
+const { audiofileUpload } = require("./multer"); // change name??
 
 //Primsa Client import
 const prisma = require("../prisma");
-const audiofileUpload = require("./multer");
 
 router.get("/", authenticate, async (req, res, next) => {
   if (req.user.admin === false) {
@@ -37,22 +37,28 @@ router.post(
   authenticate,
   audiofileUpload.single("mp3"),
   async (req, res, next) => {
-    const { name, duration, bitrate, samplingrate } = req.body;
-    const upload = req.upload;
+    const { duration, bitrate, samplingrate } = req.body;
+   console.log(req.body);
+    const file = req.file;
+     if (!file) {
+       return res.status(400).send("No file uploaded.");
+     }
+
+
     try {
       const newUpload = await prisma.upload.create({
         data: {
-          name: upload.originalname,
+          name: file.originalname,
           userId: req.user.id,
           duration,
           bitrate,
           samplingrate,
-          audioDataUrl: upload.path,
+          audioDataUrl: file.path,
         },
       });
       res.status(201).json({
         message: "MP3 uploaded successfully!",
-        upload: newUpload,
+        file: newUpload,
       });
     } catch (error) {
       next({ error });

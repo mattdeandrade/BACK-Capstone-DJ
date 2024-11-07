@@ -31,7 +31,7 @@ app.use("/api", limiter);
 app.use(express.json());
 
 // Uplolad file storage
-app.use("/multer", require("./api/multer.js"));
+//app.use("/multer", require("./api/multer.js"));
 
 app.use(require("./api/auth/auth.js").router);
 app.use("/tracks", require("./api/tracks"));

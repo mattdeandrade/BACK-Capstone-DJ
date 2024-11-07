@@ -42,4 +42,4 @@ const audiofileUpload = multer({
   },
 });
 
-module.exports = audiofileUpload;
+module.exports = {audiofileUpload};
