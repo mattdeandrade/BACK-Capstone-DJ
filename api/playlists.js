@@ -49,7 +49,7 @@ router.post("/", authenticate, async (req, res, next) => {
 router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackIds } = req.body;
-  console.log(req.body);
+  
 
   const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
 
