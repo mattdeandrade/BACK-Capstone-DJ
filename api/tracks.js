@@ -2,14 +2,8 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
-// For handling audio file uploads
-// multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
-const multer = require("multer");
-
 // Require Upload audio file function import
-const { audiofileUpload } = require("./multer"); 
-
-
+const { audiofileUpload } = require("./multer");
 
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
@@ -52,50 +46,54 @@ router.get("/:id", authenticate, async (req, res, next) => {
 });
 
 // POST Tracks from seed.
-router.post("/", audiofileUpload.single("mp3"),authenticate, async (req, res, next) => {
-  const file = req.file;
+router.post(
+  "/",
+  audiofileUpload.single("mp3"),
+  authenticate,
+  async (req, res, next) => {
+    const file = req.file;
 
-  if (!file) {
-    return res.status(400).send("No file uploaded.");
+    if (!file) {
+      return res.status(400).send("No file uploaded.");
+    }
+
+    const {
+      trackName,
+      artistName,
+      bitrate,
+      bpm,
+      genre,
+      instrumental,
+      vocals,
+      duration,
+      playlistId,
+    } = req.body;
+    try {
+      const newTrack = await prisma.track.create({
+        data: {
+          trackName: file.originalname,
+          artistName,
+          bitrate,
+          bpm,
+          genre,
+          instrumental,
+          vocals,
+          duration,
+          userId: req.user.id,
+          playlistId,
+          audioDataUrl: file.path,
+        },
+      });
+      // Return success response with file metadata
+      res.status(201).json({
+        message: "MP3 uploaded successfully!",
+        file: newTrack,
+      });
+    } catch (e) {
+      next(e);
+    }
   }
-
-  const {
-    trackName,
-    artistName,
-    bitrate,
-    bpm,
-    genre,
-    instrumental,
-    vocals,
-    duration,
-    playlistId,
-  } = req.body;
-  try {
-    const newTrack = await prisma.track.create({
-      data: {
-        trackName: file.originalname,
-        artistName,
-        bitrate,
-        bpm,
-        genre,
-        instrumental,
-        vocals,
-        duration,
-        userId: req.user.id,
-        playlistId,
-        audioDataUrl: file.path,
-      },
-    });
-    // Return success response with file metadata
-    res.status(201).json({
-      message: "MP3 uploaded successfully!",
-      file: newTrack,
-    });
-  } catch (e) {
-    next(e);
-  }
-});
-
+);
 
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;

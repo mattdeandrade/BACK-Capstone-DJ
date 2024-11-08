@@ -7,11 +7,11 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-  "username": "foobat8755564",
-  "password": "foobar",
-   "email": "foobat435723@yahoo.com",
-      "firstName": "Lov75e2fefwfooo",
-      "lastName": "Jone7s5fweffooo",
+  "username": "Fisher1",
+  "password": "followthefish",
+   "email": "vibe6758947@gmail.com",
+      "firstName": "Someone",
+      "lastName": "Else",
       "admin": false
 }
 

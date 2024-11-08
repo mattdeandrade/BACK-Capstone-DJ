@@ -2,12 +2,8 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
-// For handling audio file uploads
-// multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
-const multer = require("multer");
-
 // Require Upload audio file function import
-const { audiofileUpload } = require("./multer"); 
+const { audiofileUpload } = require("./multer");
 
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
@@ -50,7 +46,7 @@ router.post(
       channelmode,
     } = req.body;
 
-  const file = req.file;
+    const file = req.file;
     if (!file) {
       return res.status(400).send("No file uploaded.");
     }
