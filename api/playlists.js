@@ -54,7 +54,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
   const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
 
   try {
-    // console.log(tracks);
+    
     if (playlist.userId !== req.user.id) {
       return next({ status: 403, message: "Nope. Sorry." });
     }

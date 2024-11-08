@@ -195,6 +195,10 @@ Authorization: Bearer {{token}}
 ### Get All Tracks by User
 GET {{host}}/users/tracks
 Authorization: Bearer {{token}}
+
+### Get All Playlists by User
+GET {{host}}/users/playlists
+Authorization: Bearer {{token}}
  
 
  
