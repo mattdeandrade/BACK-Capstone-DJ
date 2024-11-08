@@ -165,6 +165,10 @@ DELETE {{host}}/uploads/4
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
+###Upload MP3 file
+POST {{host}}/uploads 
+Authorization: Bearer {{token}}
+Content-Type: aaudio/mpeg
 
 
 
@@ -186,6 +190,14 @@ Authorization: Bearer {{token}}
 
 ### get track by ID for user
 GET {{host}}/users/51/tracks/2506/
+Authorization: Bearer {{token}}
+
+### Get All Tracks by User
+GET {{host}}/users/tracks
+Authorization: Bearer {{token}}
+
+### Get All Playlists by User
+GET {{host}}/users/playlists
 Authorization: Bearer {{token}}
  
 

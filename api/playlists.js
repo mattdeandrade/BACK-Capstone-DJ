@@ -45,16 +45,16 @@ router.post("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Add single or multiple tracks to a user-owned playlist
+// Add single or multiple tracks to a specific user-owned playlist
 router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackIds } = req.body;
-  console.log(req.body);
+  
 
   const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
 
   try {
-    // console.log(tracks);
+    
     if (playlist.userId !== req.user.id) {
       return next({ status: 403, message: "Nope. Sorry." });
     }
@@ -81,7 +81,10 @@ router.delete("/:id", authenticate, async (req, res, next) => {
   try {
     const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
     if (!playlist || playlist.userId !== req.user.id) {
-      return next({ status: 403, message: "You do not have access to this playlist." });
+      return next({
+        status: 403,
+        message: "You do not have access to this playlist.",
+      });
     }
     await prisma.playlist.delete({ where: { id: +id } });
     res.status(204).send(); // No content to send back
@@ -89,4 +92,3 @@ router.delete("/:id", authenticate, async (req, res, next) => {
     next(e);
   }
 });
-
