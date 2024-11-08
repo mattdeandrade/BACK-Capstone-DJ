@@ -29,7 +29,6 @@ router.get("/myprofile", authenticate, async (req, res, next) => {
   try {
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: +user.id },
-
     });
 
     if (req.user.id !== user.id) {
@@ -62,10 +61,9 @@ router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
   try {
-    
-
     const userPlaylists = await prisma.playlist.findMany({
       where: { userId: +user.id },
+      include: { tracks: true, user: true },
     });
 
     res.json(userPlaylists);

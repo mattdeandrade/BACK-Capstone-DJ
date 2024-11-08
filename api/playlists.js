@@ -8,6 +8,7 @@ const { authenticate } = require("./auth/auth");
 //Primsa Client import
 const prisma = require("../prisma");
 
+//Get all playlists
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const playlists = await prisma.playlist.findMany();
@@ -17,6 +18,19 @@ router.get("/", authenticate, async (req, res, next) => {
       next({ status: 403, message: "You do not have authorized access." });
     }
     res.json(playlists);
+  } catch (e) {
+    next(e);
+  }
+});
+
+//Get one playlist by id
+router.get("/:id", authenticate, async (req, res, next) => {
+  try {
+    const playlist = await prisma.playlist.findUnique({
+      where: { id: +req.params.id },
+      include: { tracks: true },
+    });
+    res.json(playlist);
   } catch (e) {
     next(e);
   }
@@ -49,12 +63,10 @@ router.post("/", authenticate, async (req, res, next) => {
 router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackIds } = req.body;
-  
 
   const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
 
   try {
-    
     if (playlist.userId !== req.user.id) {
       return next({ status: 403, message: "Nope. Sorry." });
     }
