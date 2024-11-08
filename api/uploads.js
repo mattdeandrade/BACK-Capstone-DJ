@@ -3,16 +3,11 @@ const express = require("express");
 const router = express.Router();
 module.exports = router;
 
-// For handling audio file uploads
-// multer: Middleware for handling multipart/form-data, which is commonly used for file uploads.
-const multer = require("multer");
-// ???const audiofiles = multer({ dest: "uploads/" }); // Temporarily save file to local storage
-
 //Authentication Required import
 const { authenticate } = require("./auth/auth");
 
 // Require Upload audio file import
-const { audiofileUpload } = require("./multer"); 
+const { audiofileUpload } = require("./multer");
 
 //Primsa Client import
 const prisma = require("../prisma");
@@ -64,8 +59,6 @@ router.post(
     }
   }
 );
-
-
 
 // Update the name of an upload
 router.patch("/:id", authenticate, async (req, res, next) => {
