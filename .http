@@ -1,33 +1,5 @@
 @host = http://localhost:3000
 
-
-//finish delete routes for all
-//finish patch routes:
-// edits - All fields
-// uploads - edit name
-// users route - get account information for user. name, email, lastname,
-// we should test editing a mp3 with a req, and also storing and fetching
-// actual mp3 files versus seeded data. Install ffmpeg depency
-// convert uploaded mp4 to mp3 through upload route
-// try using ffmpeg editing functions on edit routes
-
-//wednesday
-//finish leftover from tuesday
-//Spotify API connection
-
-//thursday
-//finish wed + tues
-//catchup with fontend
-
-//stretch goals: 
-//account creation? time editing? leaderboard?
-//social media people vote on public uploads, somebody could have highest rated
-//uploads and be number 1 on leaderboard for content.
-
-
-
-
-
 ### USER ACCESS REQUIRED AKA AUTHENTICATE
 
 ### Register new USER or ADMIN!
@@ -35,11 +7,11 @@ POST {{host}}/register
 Content-Type: application/json
 
 {
-  "username": "foobat8755564",
-  "password": "foobar",
-   "email": "foobat435723@yahoo.com",
-      "firstName": "Lov75e2fefwfooo",
-      "lastName": "Jone7s5fweffooo",
+  "username": "Fisher1",
+  "password": "followthefish",
+   "email": "vibe6758947@gmail.com",
+      "firstName": "Someone",
+      "lastName": "Else",
       "admin": false
 }
 
@@ -57,7 +29,7 @@ Content-Type: application/json
 GET {{host}}/playlists
 Authorization: Bearer {{token}}
 
-###Post req to add tracks to our foobaarbaz account
+###Add a track 
 @token = {{login.response.body.token}}
 POST {{host}}/tracks
 Authorization: Bearer {{token}}
@@ -75,6 +47,13 @@ Content-Type: application/json
     "userId": 52
  
 }
+
+
+###Delete track
+DELETE {{host}}/tracks/2508
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 
 ###Post req to add playlist to our foobaarbaz account
 
@@ -108,6 +87,10 @@ Authorization: Bearer {{token}}
   "trackIds": [2507, 2506]
 }
 
+### Get your info
+GET {{host}}/users/52
+Authorization: Bearer {{token}}
+
 ### Get your tracks
 GET {{host}}/users/tracks
 Authorization: Bearer {{token}}
@@ -119,6 +102,7 @@ Authorization: Bearer {{token}}
 ### Get your edits
 GET {{host}}/users/edits
 Authorization: Bearer {{token}}
+
 ### create new edit
 POST {{host}}/edits/
 Authorization: Bearer {{token}}
@@ -137,6 +121,24 @@ Content-Type: application/json
 "effects": "reverb"
 }
 
+### Update an edit
+PATCH {{host}}/edits/8
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "editName": "A Thing 3",
+  "artistName": "Crime Mob",
+  "vocals": true,
+  "instrumental": false
+}
+
+
+###Delete Edit
+DELETE {{host}}/edits/8
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
 ### Create a upload
 POST {{host}}/uploads/
 Authorization: Bearer {{token}}
@@ -149,9 +151,29 @@ Content-Type: application/json
 
  }
 
+### Update an upload
+PATCH {{host}}/uploads/3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Upload Revised 4"
+}
+
+###Delete upload
+DELETE {{host}}/uploads/4
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###Upload MP3 file
+POST {{host}}/uploads 
+Authorization: Bearer {{token}}
+Content-Type: aaudio/mpeg
+
+
 
 ### Get your uploads
-GET {{host}}/users/uploads
+GET {{host}}/users/52/uploads
 Authorization: Bearer {{token}}
 
 
@@ -167,7 +189,15 @@ Authorization: Bearer {{token}}
 
 
 ### get track by ID for user
-GET {{host}}/users/tracks/2506/
+GET {{host}}/users/51/tracks/2506/
+Authorization: Bearer {{token}}
+
+### Get All Tracks by User
+GET {{host}}/users/tracks
+Authorization: Bearer {{token}}
+
+### Get All Playlists by User
+GET {{host}}/users/playlists
 Authorization: Bearer {{token}}
  
 
@@ -182,7 +212,7 @@ GET {{host}}/users/edits/6/
 Authorization: Bearer {{token}}
  
 ### get upload by ID for user
-GET {{host}}/users/uploads/6/
+GET {{host}}/users/51/uploads/
 Authorization: Bearer {{token}}
  
 

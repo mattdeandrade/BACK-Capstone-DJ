@@ -7,7 +7,8 @@ const { authenticate } = require("./auth/auth");
 
 //Primsa Client import
 const prisma = require("../prisma");
-//get all routes for a single user
+
+// Admin can get a list of all users
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const users = await prisma.user.findMany();
@@ -21,34 +22,57 @@ router.get("/", authenticate, async (req, res, next) => {
     next(error);
   }
 });
-//UPDATED BY MATT
-router.get("/tracks", authenticate, async (req, res, next) => {
+
+// Get all account info for the signed-in user
+router.get("/myprofile", authenticate, async (req, res, next) => {
   const user = req.user;
   try {
-    const userTracks = await prisma.track.findMany({
-      where: { userId: user.id },
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +user.id },
     });
+
+    if (req.user.id !== user.id) {
+      next({ status: 403, message: "You are not the authorized user." });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Get all of the signed-in user's tracks
+router.get("/tracks", authenticate, async (req, res, next) => {
+  const user = req.user;
+
+  try {
+    const userTracks = await prisma.track.findMany({
+      where: { userId: +user.id },
+    });
+
     res.json(userTracks);
   } catch (error) {
     next(error);
   }
 });
-//UPDATED BY MATT
+
+// Get all of the signed-in user's playlists
 router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
   try {
     const userPlaylists = await prisma.playlist.findMany({
-      where: { userId: user.id },
+      where: { userId: +user.id },
     });
     res.json(userPlaylists);
   } catch (error) {
     next(error);
   }
 });
-//UPDATED BY MATT
-router.get("/edits", authenticate, async (req, res, next) => {
-  const user = req.user;
+
+// Get all of the signed-in user's edits
+router.get("/:id/edits", authenticate, async (req, res, next) => {
+  const { id } = req.params;
 
   try {
     const userEdits = await prisma.edit.findMany({
@@ -60,9 +84,10 @@ router.get("/edits", authenticate, async (req, res, next) => {
     next(error);
   }
 });
-// UPDATED BY MATT
-router.get("/uploads", authenticate, async (req, res, next) => {
-  const user = req.user;
+
+// Get all of the signed in user's uploads
+router.get("/:id/uploads", authenticate, async (req, res, next) => {
+  const { id } = req.params;
 
   try {
     const userUploads = await prisma.upload.findMany({
@@ -76,9 +101,10 @@ router.get("/uploads", authenticate, async (req, res, next) => {
 });
 
 //getbyid routes for a single user
-//UPDATED BY MATT
-router.get("/tracks/:trackId", authenticate, async (req, res, next) => {
-  const user = req.user;
+
+// Get a specific track owned by the signed-in user
+router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
+  const { id } = req.params;
   const { trackId } = req.params;
 
   try {
@@ -98,32 +124,38 @@ router.get("/tracks/:trackId", authenticate, async (req, res, next) => {
     next(error);
   }
 });
-//UPDATED BY MATT
-router.get("/playlists/:playlistId", authenticate, async (req, res, next) => {
-  const user = req.user;
-  const { playlistId } = req.params;
 
-  try {
-    const userPlaylist = await prisma.playlist.findUniqueOrThrow({
-      where: { id: +playlistId },
-      include: { tracks: true },
-    });
+// Get a specific playlist owned by the signed in user
+router.get(
+  "/:id/playlists/:playlistId",
+  authenticate,
+  async (req, res, next) => {
+    const { id } = req.params;
+    const { playlistId } = req.params;
 
-    if (user.id !== userPlaylist.userId) {
-      next({
-        status: 403,
-        message: "User does not own this playlist.",
+    try {
+      const userPlaylist = await prisma.playlist.findUniqueOrThrow({
+        where: { id: +playlistId },
+        include: { tracks: true },
       });
-    }
 
-    res.json(userPlaylist);
-  } catch (error) {
-    next(error);
+      if (user.id !== userPlaylist.userId) {
+        next({
+          status: 403,
+          message: "User does not own this playlist.",
+        });
+      }
+
+      res.json(userPlaylist);
+    } catch (error) {
+      next(error);
+    }
   }
-});
-//UPDATED BY MATT
-router.get("/edits/:editId", authenticate, async (req, res, next) => {
-  const user = req.user;
+);
+
+// Gets a specific edit owned by the signed-in user
+router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
+  const { id } = req.params;
   const { editId } = req.params;
 
   try {
@@ -143,9 +175,10 @@ router.get("/edits/:editId", authenticate, async (req, res, next) => {
     next(error);
   }
 });
-//UPDATED BY MATT
-router.get("/uploads/:uploadId", authenticate, async (req, res, next) => {
-  const user = req.user;
+
+// Gets a specific upload owned by the signed in user
+router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
+  const { id } = req.params;
   const { uploadId } = req.params;
 
   try {

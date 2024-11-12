@@ -6,11 +6,8 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const rateLimit = require("express-rate-limit");
-
-const cors = require("cors");
-app.use(cors({ origin: /localhost/ }));
-
 const morgan = require("morgan");
+const cors = require("cors");
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -18,6 +15,9 @@ app.use((req, res, next) => {
   next();
 });
 app.use(morgan("dev"));
+
+// Connects frontend and backend
+app.use(cors({ origin: /localhost/ }));
 
 // Define the rate limiter
 const limiter = rateLimit({

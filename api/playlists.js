@@ -43,19 +43,17 @@ router.post("/", authenticate, async (req, res, next) => {
     next(e);
   }
 });
-// Edit (add tracks to) a specific playlist
-router.patch("/", authenticate, async (req, res, next) => {
+
+// Add single or multiple tracks to a specific user-owned playlist
+router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const { trackIds } = req.body;
-  console.log(req.body);
+
+  const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
+
   try {
-    // console.log(tracks);
-    const playlist = await prisma.playlist.findUnique({ where: { id: +id } });
-    if (!playlist || playlist.userId !== req.user.id) {
-      return next({
-        status: 403,
-        message: "You do not have access to this playlist.",
-      });
+    if (playlist.userId !== req.user.id) {
+      return next({ status: 403, message: "Nope. Sorry." });
     }
     const tracks = trackIds.map((trackId) => ({ id: trackId }));
     const updatedPlaylist = await prisma.playlist.update({
@@ -89,38 +87,3 @@ router.delete("/:id", authenticate, async (req, res, next) => {
     next(e);
   }
 });
-// Play a playlist
-router.post("/play/:id", authenticate, async (req, res, next) => {
-  const { id } = req.params;
-  try {
-    const playlist = await prisma.playlist.findUnique({
-      where: { id: +id },
-      include: { tracks: true },
-    });
-    if (!playlist) {
-      return next({ status: 404, message: "Playlist not found." });
-    }
-    // Logic for playing the playlist (e.g., return playlist data)
-    res.json({ message: "Playing playlist.", playlist });
-  } catch (error) {
-    next(error);
-  }
-});
-// // Share a playlist
-// router.post("/share/:id", authenticate, async (req, res, next) => {
-//   const { id } = req.params;
-//   try {
-//     const playlist = await prisma.playlist.findUnique({
-//       where: { id: +id },
-//       include: { tracks: true },
-//     });
-//     if (!playlist) {
-//       return next({ status: 404, message: "Playlist not found." });
-//     }
-//     // Implement your sharing logic here, e.g., creating a shareable link
-//     res.json({ message: "Playlist shared successfully!", playlist });
-//   } catch (error) {
-//     next(error);
-//   }
-// });
-module.exports = router;
