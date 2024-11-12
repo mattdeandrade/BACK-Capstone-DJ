@@ -1,0 +1,85 @@
+Table User {
+  id                 Int        [pk, increment]
+  username           String     [unique]
+  password           String
+  spotifyUsername    String     [null]
+  socialMediaAccount String     [null]
+  firstName          String
+  lastName           String
+  email              String     [unique]
+  admin              Boolean    [default: 'false']
+}
+
+Table Track {
+  id           Int       [pk, increment]
+  trackName    String
+  artistName   String
+  bitrate      Int       [default: 320]
+  samplingrate Int       [default: 44100]
+  channelmode  String    [default: 'stereo']
+  audioDataUrl String    [null]
+  albumName    String    [null]
+  bpm          Int
+  genre        String
+  instrumental Boolean
+  vocals       Boolean
+  duration     Int
+  userId       Int
+  playlistId   Int      [null]
+  
+  Ref: userId > User.id
+  Ref: playlistId > Playlist.id
+}
+
+Table Upload {
+  id           Int     [pk, increment]
+  name         String
+  userId       Int
+  duration     Int
+  bitrate      Int     [default: 320]
+  samplingrate Int     [default: 44100]
+  channelmode  String  [default: 'stereo']
+  audioDataUrl String  [null]
+
+  Ref: userId > User.id
+}
+
+ Table Playlist {
+  id          Int     [pk, increment]
+  name        String
+  description String
+  userId      Int
+  
+  Ref: userId > User.id
+}
+
+Table Edit {
+  id           Int      [pk, increment]
+  editName     String
+  artistName   String
+  vocals       Boolean
+  instrumental Boolean
+  duration     Int
+  pitch        Int
+  bpm          Int
+  genre        String
+  loop         Boolean  [null]
+  effects      String
+  userId       Int
+  bitrate      Int      [default: 320]
+  samplingrate Int      [default: 44100]
+  channelmode  String   [default: 'stereo']
+  audioDataUrl String? [null]
+
+  Ref: userId > User.id
+}
+
+Table UserTracks {
+    userId      Int
+    trackId     Int
+
+    Ref: userId > User.id
+    Ref: trackId > Track.id
+}
+
+Ref: Track.userId > User.id

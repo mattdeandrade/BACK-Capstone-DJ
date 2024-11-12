@@ -12,6 +12,7 @@ const { audiofileUpload } = require("./multer");
 //Primsa Client import
 const prisma = require("../prisma");
 
+// Admins can use this router to get all edits created by users in our database
 router.get("/", authenticate, async (req, res, next) => {
   if (req.user.admin === false) {
     next({ status: 403, message: "You do not authorized access." });
@@ -25,7 +26,8 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Post audiofile uploads metadata in Prisma
+// Post audiofile uploads metadata in Prisma and add to multer storage
+// This uses multer to store the new audio file uploaded by the user.
 router.post(
   "/",
   authenticate,
@@ -49,7 +51,7 @@ router.post(
           audioDataUrl: file.path,
         },
       });
-      // Return success response with file metadata
+      // Return successful response with file metadata
       res.status(201).json({
         message: "MP3 uploaded successfully!",
         file: newUpload,
@@ -87,6 +89,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
   }
 });
 
+// User can delete an upload as long as they are the owner
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   try {
