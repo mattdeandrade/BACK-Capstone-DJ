@@ -11,6 +11,7 @@ const { authenticate } = require("./auth/auth");
 //Primsa Client import
 const prisma = require("../prisma");
 
+// Admins can use this router to get all edits created by users in our database
 router.get("/", authenticate, async (req, res, next) => {
   try {
     if (req.user.admin === false) {
@@ -25,6 +26,8 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
+// Creates a new edit made by a logged in user. Requires authentication.
+// This uses multer to store the new audio file uploaded by the user.
 router.post(
   "/",
   authenticate,
@@ -81,7 +84,7 @@ router.post(
   }
 );
 
-// Update edit choices as the user works on an edit
+// Update edit specifications as the user works on an edit
 router.patch("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const {
@@ -134,6 +137,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
   }
 });
 
+// Deletes an edit from the database
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   try {

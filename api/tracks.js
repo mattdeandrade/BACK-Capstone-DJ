@@ -10,8 +10,7 @@ const { authenticate } = require("./auth/auth");
 //Primsa Client import
 const prisma = require("../prisma");
 
-//All Tracks can only be accessed by developrs and admin.
-// Create admin soon!
+// Admin users can access all tracks users have in the database
 router.get("/", authenticate, async (req, res, next) => {
   try {
     const tracks = await prisma.track.findMany();
@@ -26,7 +25,7 @@ router.get("/", authenticate, async (req, res, next) => {
   }
 });
 
-// Tracks are assigned to user. Login required.
+// Users can get info for a specific track (trackId) as long as they are the owner
 router.get("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   const includePlaylists = req.user
@@ -45,7 +44,8 @@ router.get("/:id", authenticate, async (req, res, next) => {
   }
 });
 
-// POST Tracks from seed.
+// POST request: Users can upload a new track to the database and it will be owned by them.
+// This uses multer to store the new audio file uploaded by the user.
 router.post(
   "/",
   audiofileUpload.single("mp3"),
@@ -84,7 +84,7 @@ router.post(
           audioDataUrl: file.path,
         },
       });
-      // Return success response with file metadata
+      // Return successful response with file metadata
       res.status(201).json({
         message: "MP3 uploaded successfully!",
         file: newTrack,
@@ -95,10 +95,13 @@ router.post(
   }
 );
 
+// Users can delete a specific track as long as they are the owner
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
+
   try {
     const track = await prisma.track.findUnique({ where: { id: +id } });
+
     if (req.user.id !== track.userId) {
       return next({
         status: 403,

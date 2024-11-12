@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+//This creates the token we will use for registered and logged in users
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 function createToken(id) {
@@ -9,9 +10,11 @@ function createToken(id) {
 
 const prisma = require("../../prisma");
 
+// This router attaches the token to the request
 router.use(async (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader?.slice(7);
+
   if (!token) return next();
 
   try {
@@ -24,8 +27,10 @@ router.use(async (req, res, next) => {
   }
 });
 
+// This router is used for registering new users
 router.post("/register", async (req, res, next) => {
   const { username, password, email, firstName, lastName, admin } = req.body;
+
   try {
     const user = await prisma.user.register(
       username,
@@ -42,8 +47,10 @@ router.post("/register", async (req, res, next) => {
   }
 });
 
+// This router is for logging in already registered users
 router.post("/login", async (req, res, next) => {
   const { username, password } = req.body;
+
   try {
     const user = await prisma.user.login(username, password);
     const token = createToken(user.id);

@@ -2,6 +2,7 @@ const { faker } = require("@faker-js/faker");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+// Define effect types for edits data to use
 const effectNames = [
   "Reverb",
   "Echo",
@@ -18,6 +19,9 @@ const effectNames = [
   "Auto-Tune",
 ];
 
+/** SEED DATABASE WITH FAKER */
+
+// Initialize number of tracks per playlist, tracks per user, number of users, number of playlists, and number of edits
 const seed = async (
   numTracksPerPlaylist = 50,
   numTracksPerUser = 5, //changed variable name to associate correct reference
@@ -34,9 +38,9 @@ const seed = async (
   }));
   await prisma.user.createMany({ data: users });
 
+  // These 4 variables are used to define userIds and userNames for connecting seed data
   const userRecords = await prisma.user.findMany({ select: { id: true } }); ///fetch Id from autoincrement to match with userId relation.
   const userIds = userRecords.map((user) => user.id);
-  console.log(`Fetched ${userIds.length} user IDs`);
   const userName = await prisma.user.findMany({ select: { username: true } });
   const userNames = userName.map((user) => user.username);
 
@@ -88,12 +92,14 @@ const seed = async (
       userId: userIds[Math.floor(Math.random() * userIds.length)],
       playlistId: playlist.id,
     }));
+    // Seeds tracks
     await prisma.track.createMany({ data: tracks });
   }
 
   const minPitch = 329.63;
   const maxPitch = 440;
   for (let i = 0; i < numEdits; i++) {
+    // Seeds edits
     await prisma.edit.create({
       data: {
         userId: Math.floor(Math.random() * numUsers) + 1,
@@ -112,6 +118,7 @@ const seed = async (
   }
 };
 
+// Runs seed function and then disconnects
 seed()
   .then(async () => await prisma.$disconnect())
   .catch(async (e) => {

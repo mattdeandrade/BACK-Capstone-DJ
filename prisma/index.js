@@ -1,6 +1,7 @@
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 
+// Created PrismaClient to read, write, and stream data from our database
 const prisma = new PrismaClient().$extends({
   model: {
     user: {
