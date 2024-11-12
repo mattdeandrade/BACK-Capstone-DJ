@@ -69,7 +69,7 @@ Table Edit {
   bitrate      Int      [default: 320]
   samplingrate Int      [default: 44100]
   channelmode  String   [default: 'stereo']
-  audioDataUrl String? [null]
+  audioDataUrl String [null]
 
   Ref: userId > User.id
 }
