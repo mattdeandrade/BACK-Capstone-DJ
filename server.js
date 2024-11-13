@@ -9,11 +9,7 @@ const rateLimit = require("express-rate-limit");
 const morgan = require("morgan");
 const cors = require("cors");
 
-// Logging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.originalUrl}`);
-  next();
-});
+//morgan for logging middleware
 app.use(morgan("dev"));
 
 // Connects frontend and backend

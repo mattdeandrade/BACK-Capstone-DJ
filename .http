@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
   "username": "foobat8755564",
-  "password": "foobar"
+  "password": "Asdfasdf123"
   
 }
 
@@ -34,7 +34,8 @@ Authorization: Bearer {{token}}
 @token = {{login.response.body.token}}
 POST {{host}}/tracks
 Authorization: Bearer {{token}}
-Content-Type: application/json
+Content-Type: multipart/form-data
+value: "mp3"
 
 {
     "trackName": "Vibey",

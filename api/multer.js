@@ -9,7 +9,7 @@ const fs = require("fs");
 // Configure `multer` for handling MP3 uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = "../mp3"; // Directory to store MP3 files
+    const uploadDir = "./mp3"; // Directory to store MP3 files
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if it doesn't exist
     }
@@ -34,8 +34,8 @@ const audiofileUpload = multer({
     const extname = fileTypes.test(
       path.extname(file.originalname).toLowerCase()
     );
-    const mimeType = fileTypes.test(file.mimetype);
-    if (extname && mimeType) {
+
+    if (extname === ".mp3" || ".mp4") {
       return cb(null, true); // Accept the file if valid
     } else {
       cb(new Error("Only MP3 files are allowed!"));
@@ -43,4 +43,4 @@ const audiofileUpload = multer({
   },
 });
 
-module.exports = {audiofileUpload};
+module.exports = { audiofileUpload };
