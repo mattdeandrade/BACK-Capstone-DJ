@@ -25,19 +25,19 @@ model User {
 
 model Track {
   id           Int       @id @default(autoincrement())
-  trackName    String
-  artistName   String
+  trackName    String?
+  artistName   String?
   bitrate      Int       @default(320)
   samplingrate Int       @default(44100)
   channelmode  String    @default("stereo")
   audioDataUrl String? //associate with users path on device
   albumName    String?
-  bpm          Int
-  genre        String
-  instrumental Boolean
-  vocals       Boolean
-  duration     Int
-  userId       Int
+  bpm          Int?
+  genre        String?
+  instrumental Boolean?
+  vocals       Boolean?
+  duration     Int?
+  userId       Int?
   playlistId   Int?
   playlist     Playlist? @relation(fields: [playlistId], references: [id])
   user         User?     @relation("UserTracks", fields: [userId], references: [id])
