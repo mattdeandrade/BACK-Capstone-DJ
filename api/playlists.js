@@ -5,8 +5,9 @@ module.exports = router;
 const { authenticate } = require("./auth/auth");
 //Primsa Client import
 const prisma = require("../prisma");
-// GET all playlists for the public (unauthenticated)
-router.get("/", async (req, res, next) => {
+
+// Admin users can access all playlists users create in the database
+router.get("/", authenticate, async (req, res, next) => {
   try {
     // Fetch all playlists (no user authentication required)
     const playlists = await prisma.playlist.findMany({
@@ -21,9 +22,11 @@ router.get("/", async (req, res, next) => {
     next(error); // Pass the error to the next middleware
   }
 });
-//Post a new playlist
+
+// POST request: creates a new playlist assigned to the current userId
 router.post("/", authenticate, async (req, res, next) => {
   const { name, description, trackIds } = req.body;
+
   try {
     const tracks = trackIds.map((id) => ({ id }));
     const playlist = await prisma.playlist.create({
@@ -70,7 +73,8 @@ router.patch("/:id", authenticate, async (req, res, next) => {
     next(e);
   }
 });
-// Delete a playlist
+
+// This router deletes the specified playlist as long as it is owned by the current user
 router.delete("/:id", authenticate, async (req, res, next) => {
   const { id } = req.params;
   try {

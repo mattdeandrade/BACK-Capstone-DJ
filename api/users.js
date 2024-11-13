@@ -45,6 +45,13 @@ router.get("/myprofile", authenticate, async (req, res, next) => {
 router.get("/tracks", authenticate, async (req, res, next) => {
   const user = req.user;
 
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these tracks.",
+    });
+  }
+
   try {
     const userTracks = await prisma.track.findMany({
       where: { userId: +user.id },
@@ -60,6 +67,12 @@ router.get("/tracks", authenticate, async (req, res, next) => {
 router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these playlists.",
+    });
+  }
   try {
     const userPlaylists = await prisma.playlist.findMany({
       where: { userId: +user.id },
@@ -100,14 +113,23 @@ router.get("/:id/uploads", authenticate, async (req, res, next) => {
   }
 });
 
-//getbyid routes for a single user
+/** GETBYID ROUTES FOR A SINGLE USER */
 
 // Get a specific track owned by the signed-in user
 router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
-  const { id } = req.params;
-  const { trackId } = req.params;
+  const { id, trackId } = req.params;
 
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these tracks.",
+    });
+  }
   try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +id },
+    });
+
     const userTrack = await prisma.track.findUniqueOrThrow({
       where: { id: +trackId },
     });
@@ -125,13 +147,12 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   }
 });
 
-// Get a specific playlist owned by the signed in user
+// Get a specific playlist owned by the signed-in user
 router.get(
   "/:id/playlists/:playlistId",
   authenticate,
   async (req, res, next) => {
-    const { id } = req.params;
-    const { playlistId } = req.params;
+    const { id, playlistId } = req.params;
 
     try {
       const userPlaylist = await prisma.playlist.findUniqueOrThrow({
@@ -155,10 +176,19 @@ router.get(
 
 // Gets a specific edit owned by the signed-in user
 router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
-  const { id } = req.params;
-  const { editId } = req.params;
+  const { id, editId } = req.params;
 
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these edits.",
+    });
+  }
   try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +id },
+    });
+
     const userEdit = await prisma.edit.findUniqueOrThrow({
       where: { id: +editId },
     });
@@ -178,10 +208,19 @@ router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
 
 // Gets a specific upload owned by the signed in user
 router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
-  const { id } = req.params;
-  const { uploadId } = req.params;
+  const { id, uploadId } = req.params;
 
+  if (req.user.id !== +id) {
+    next({
+      status: 403,
+      message: "You do not have access to these uploads.",
+    });
+  }
   try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: { id: +id },
+    });
+
     const userUpload = await prisma.upload.findUniqueOrThrow({
       where: { id: +uploadId },
     });
@@ -189,7 +228,7 @@ router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
     if (user.id !== userUpload.userId) {
       next({
         status: 403,
-        message: "User does not own this.",
+        message: "User does not own this upload.",
       });
     }
 

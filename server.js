@@ -10,10 +10,6 @@ const morgan = require("morgan");
 const cors = require("cors");
 
 // Logging middleware
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.originalUrl}`);
-  next();
-});
 app.use(morgan("dev"));
 
 // Connects frontend and backend
@@ -28,11 +24,13 @@ const limiter = rateLimit({
   legacyHeaders: false, // Disables `X-RateLimit-*` headers
 });
 
+// Applies rate limiter to all api routes
 app.use("/api", limiter);
 
 // JSON Parsing
 app.use(express.json());
 
+// API routes
 app.use(require("./api/auth/auth.js").router);
 app.use("/tracks", require("./api/tracks"));
 app.use("/edits", require("./api/edits"));
