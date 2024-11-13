@@ -35,8 +35,9 @@ const audiofileUpload = multer({
     const extname = fileTypes.test(
       path.extname(file.originalname).toLowerCase()
     );
-    const mimeType = fileTypes.test(file.mimetype);
-    if (extname && mimeType) {
+
+    //try to incorporate mimetype authentication
+    if (extname === ".mp3" || ".mp4" || ".wav") {
       return cb(null, true); // Accept the file if valid
     } else {
       cb(new Error("Only MP3 files are allowed!"));
