@@ -45,13 +45,6 @@ router.get("/myprofile", authenticate, async (req, res, next) => {
 router.get("/tracks", authenticate, async (req, res, next) => {
   const user = req.user;
 
-  if (req.user.id !== +id) {
-    next({
-      status: 403,
-      message: "You do not have access to these tracks.",
-    });
-  }
-
   try {
     const userTracks = await prisma.track.findMany({
       where: { userId: +user.id },
@@ -67,12 +60,6 @@ router.get("/tracks", authenticate, async (req, res, next) => {
 router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
-  if (req.user.id !== +id) {
-    next({
-      status: 403,
-      message: "You do not have access to these playlists.",
-    });
-  }
   try {
     const userPlaylists = await prisma.playlist.findMany({
       where: { userId: +user.id },

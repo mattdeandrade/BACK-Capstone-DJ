@@ -29,6 +29,7 @@ router.use(async (req, res, next) => {
 
 // This router is used for registering new users
 router.post("/register", async (req, res, next) => {
+  console.log(req.body);
   const { username, password, email, firstName, lastName, admin } = req.body;
 
   try {
