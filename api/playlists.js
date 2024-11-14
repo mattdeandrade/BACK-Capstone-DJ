@@ -61,7 +61,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
         message: "User does not have access to this playlist.",
       });
     }
-    const tracks = trackIds.map((trackId) => ({ id: trackId }));
+    const tracks = trackIds.map((trackId) => ({ id: +trackId }));
     const updatedPlaylist = await prisma.playlist.update({
       where: {
         id: +id,
