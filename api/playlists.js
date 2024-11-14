@@ -56,10 +56,13 @@ router.patch("/:id", authenticate, async (req, res, next) => {
 
   try {
     if (playlist.userId !== req.user.id) {
-      return next({ status: 403, message: "Nope. Sorry." });
+      return next({
+        status: 403,
+        message: "User does not have access to this playlist.",
+      });
     }
 
-     const tracks = trackIds.map((trackId) => ({ id: +trackId })); //mapping over trackId instead or req param id **
+    const tracks = trackIds.map((trackId) => ({ id: +trackId })); //mapping over trackId instead or req param id **
 
     const playlists = await prisma.playlist.update({
       where: {
