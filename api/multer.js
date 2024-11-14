@@ -9,7 +9,7 @@ const fs = require("fs");
 // Configure `multer` for handling MP3 uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = "../mp3"; // Directory to store MP3 files
+    const uploadDir = "./mp3"; // Directory to store MP3 files
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true }); // Create directory if it doesn't exist
     }
