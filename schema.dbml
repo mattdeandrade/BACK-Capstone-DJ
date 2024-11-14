@@ -12,20 +12,20 @@ Table User {
 
 Table Track {
   id           Int       [pk, increment]
-  trackName    String
-  artistName   String
+  trackName    String    [null]
+  artistName   String    [null]
   bitrate      Int       [default: 320]
   samplingrate Int       [default: 44100]
   channelmode  String    [default: 'stereo']
   audioDataUrl String    [null]
   albumName    String    [null]
-  bpm          Int
-  genre        String
-  instrumental Boolean
-  vocals       Boolean
-  duration     Int
-  userId       Int
-  playlistId   Int      [null]
+  bpm          Int       [null]
+  genre        String    [null]
+  instrumental Boolean   [null]
+  vocals       Boolean   [null]
+  duration     Int       [null]
+  userId       Int       [null]
+  playlistId   Int       [null]
   
   Ref: userId > User.id
   Ref: playlistId > Playlist.id
