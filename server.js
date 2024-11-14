@@ -13,7 +13,7 @@ const cors = require("cors");
 app.use(morgan("dev"));
 
 // Connects frontend and backend
-app.use(cors({ origin: /localhost/ }));
+app.use(cors({ origin: "https://resonant-creponne-9c1895.netlify.app/" }));
 
 // Define the rate limiter
 const limiter = rateLimit({
