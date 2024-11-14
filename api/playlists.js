@@ -59,7 +59,7 @@ router.patch("/:id", authenticate, async (req, res, next) => {
       return next({ status: 403, message: "Nope. Sorry." });
     }
 
-    const tracks = trackIds.map((id) => ({ id }));
+     const tracks = trackIds.map((trackId) => ({ id: +trackId })); //mapping over trackId instead or req param id **
 
     const playlists = await prisma.playlist.update({
       where: {
