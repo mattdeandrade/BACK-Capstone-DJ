@@ -76,6 +76,7 @@ router.get("/playlists", authenticate, async (req, res, next) => {
   try {
     const userPlaylists = await prisma.playlist.findMany({
       where: { userId: +user.id },
+      include: { tracks: true, user: true },
     });
 
     res.json(userPlaylists);
