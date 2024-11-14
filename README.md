@@ -65,14 +65,20 @@ This is a collection of all of our users' private playlists. Features include:
 
 - 🔒 GET /playlists sends an array of all playlists
   - Admin access required
-- 🔒 POST /playlists creates a new playlist with the connected tracks owned by the logged in user
+- 🔒 POST /playlists creates a new playlist with the connected tracks owned by the logged-in user
   - Request body includes the playlist name, description, and track Ids
-- 🔒 PATCH /playlists add single or multiple tracks to a specific user-owned playlist
+- 🔒 PATCH /playlists/:id add single or multiple tracks to a specific user-owned playlist
   - Request body includes the track Ids to be added to the playlist
-- 🔒 DELETE /playlists deletes the specified playlist by track Id only if it is owned by the current user.
+- 🔒 DELETE /playlists/:id deletes the specified playlist by track Id only if it is owned by the current user.
   - Knuck If You Buck!
 
 ### Track Routes
+
+- 🔒 GET /tracks sends an array of all tracks
+  - Admin access required
+- 🔒 GET /tracks/:id sends an object of a single tracks's metadata as long as it is owned by the logged-in user
+- 🔒 POST /tracks adds a track to the database and it is owned by the logged-in user
+  - Uses multer to store track metadata in the database. It creates a new name in the database based on the date and time the track is added.
 
 ### Upload Routes
 
@@ -81,6 +87,8 @@ This is a collection of all of our users' private playlists. Features include:
 ## DEPENDENCIES
 
 ### Multer
+
+- Stores track metadata in the database. It creates a new name in the database based on the date and time the track is added.
 
 ### Express
 
