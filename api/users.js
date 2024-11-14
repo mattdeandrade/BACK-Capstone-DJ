@@ -45,13 +45,6 @@ router.get("/myprofile", authenticate, async (req, res, next) => {
 router.get("/tracks", authenticate, async (req, res, next) => {
   const user = req.user;
 
-  if (req.user.id !== +id) {
-    next({
-      status: 403,
-      message: "You do not have access to these tracks.",
-    });
-  }
-
   try {
     const userTracks = await prisma.track.findMany({
       where: { userId: +user.id },
@@ -67,15 +60,10 @@ router.get("/tracks", authenticate, async (req, res, next) => {
 router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
-  if (req.user.id !== +id) {
-    next({
-      status: 403,
-      message: "You do not have access to these playlists.",
-    });
-  }
   try {
     const userPlaylists = await prisma.playlist.findMany({
       where: { userId: +user.id },
+      include: { tracks: true, user: true },
     });
 
     res.json(userPlaylists);
@@ -124,11 +112,12 @@ router.get("/:id/uploads", authenticate, async (req, res, next) => {
   }
 });
 
-/** GETBYID ROUTES FOR A SINGLE USER */
+//getbyid routes for a single user
 
 // Get a specific track owned by the signed-in user
 router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
-  const { id, trackId } = req.params;
+  const { id } = req.params;
+  const { trackId } = req.params;
 
   if (req.user.id !== +id) {
     next({
@@ -136,6 +125,7 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
       message: "You do not have access to these tracks.",
     });
   }
+
   try {
     const user = await prisma.user.findUniqueOrThrow({
       where: { id: +id },
@@ -158,12 +148,13 @@ router.get("/:id/tracks/:trackId", authenticate, async (req, res, next) => {
   }
 });
 
-// Get a specific playlist owned by the signed-in user
+// Get a specific playlist owned by the signed in user
 router.get(
   "/:id/playlists/:playlistId",
   authenticate,
   async (req, res, next) => {
-    const { id, playlistId } = req.params;
+    const { id } = req.params;
+    const { playlistId } = req.params;
 
     if (req.user.id !== +id) {
       next({
@@ -198,8 +189,8 @@ router.get(
 
 // Gets a specific edit owned by the signed-in user
 router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
-  const { id, editId } = req.params;
-
+  const { id } = req.params;
+  const { editId } = req.params;
   if (req.user.id !== +id) {
     next({
       status: 403,
@@ -230,8 +221,8 @@ router.get("/:id/edits/:editId", authenticate, async (req, res, next) => {
 
 // Gets a specific upload owned by the signed in user
 router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
-  const { id, uploadId } = req.params;
-
+  const { id } = req.params;
+  const { uploadId } = req.params;
   if (req.user.id !== +id) {
     next({
       status: 403,
@@ -250,7 +241,7 @@ router.get("/:id/uploads/:uploadId", authenticate, async (req, res, next) => {
     if (user.id !== userUpload.userId) {
       next({
         status: 403,
-        message: "User does not own this upload.",
+        message: "User does not own this.",
       });
     }
 
