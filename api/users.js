@@ -46,11 +46,14 @@ router.get("/tracks", authenticate, async (req, res, next) => {
   const user = req.user;
 
   try {
-    const userTracks = await prisma.track.findMany({
-      where: { userId: +user.id },
+    const userTracks = await prisma.user.findUnique({
+      where: { id: +user.id },
+      include: {
+        tracks: true,
+      },
     });
 
-    res.json(userTracks);
+    res.json(userTracks.tracks);
   } catch (error) {
     next(error);
   }
@@ -61,51 +64,44 @@ router.get("/playlists", authenticate, async (req, res, next) => {
   const user = req.user;
 
   try {
-    const userPlaylists = await prisma.playlist.findMany({
-      where: { userId: +user.id },
+    const userPlaylists = await prisma.user.findUnique({
+      where: { id: +user.id },
+      include: { playlists: true },
     });
 
-    res.json(userPlaylists);
+    res.json(userPlaylists.playlists);
   } catch (error) {
     next(error);
   }
 });
 
 // Get all of the signed-in user's edits
-router.get("/:id/edits", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+router.get("/edits", authenticate, async (req, res, next) => {
+  const user = req.user;
 
   try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these edits.",
-      });
-    }
-    const userEdits = await prisma.edit.findMany({ where: { userId: +id } });
+    const userEdits = await prisma.user.findUnique({
+      where: { id: +user.id },
+      include: { edits: true },
+    });
 
-    res.json(userEdits);
+    res.json(userEdits.edits);
   } catch (error) {
     next(error);
   }
 });
 
 // Get all of the signed in user's uploads
-router.get("/:id/uploads", authenticate, async (req, res, next) => {
-  const { id } = req.params;
+router.get("/uploads", authenticate, async (req, res, next) => {
+  const user = req.user;
 
   try {
-    if (req.user.id !== +id) {
-      next({
-        status: 403,
-        message: "You do not have access to these uploads.",
-      });
-    }
-    const userUploads = await prisma.upload.findMany({
-      where: { userId: +id },
+    const userUploads = await prisma.user.findUnique({
+      where: { id: +user.id },
+      include: { uploads: true },
     });
 
-    res.json(userUploads);
+    res.json(userUploads.uploads);
   } catch (error) {
     next(error);
   }
